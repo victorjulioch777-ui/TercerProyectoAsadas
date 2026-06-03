@@ -1,4 +1,4 @@
-from services.api_aresep import obtener_lista_asadas, obtener_metadata
+from services.api_aresep import obtener_lista_asadas, obtener_metadata, obtener_objetos_asadas
 
 def main():
     metadata = obtener_metadata()
@@ -15,6 +15,14 @@ def main():
     print("Provincia:", asadas[0].get("provincia")) 
     print("Cantón:", asadas[0].get("canton"))
     print("Distrito:", asadas[0].get("distrito"))
+    
+    asadas = obtener_objetos_asadas()
+    
+    print("Objetos ASADA creados correctamente.")
+    print("Cantidad de ASADAS", len(asadas))
+    
+    print("\nPrimera ASADA:")
+    print(asadas[0])    
     
 if __name__ == "__main__":
     main()
