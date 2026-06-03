@@ -15,7 +15,8 @@ class Asada:
         coordenadas_x,
         coordenadas_y
     ):
-        self.id_Asada = int(id_Asada)
+        self.id_asada = int(id_Asada)
+        self.id_Asada = self.id_asada
         self.id_objeto = int(id_objeto)
         self.operador = operador
         self.telefono = telefono
@@ -47,9 +48,9 @@ class Asada:
             coordenadas_y=data.get("coordenadaY")
         )
     
-    def to_dic(self):
+    def to_dict(self):
         return {
-            "id_Asada": self.id_Asada,
+            "id_asada": self.id_asada,
             "id_objeto": self.id_objeto,
             "operador": self.operador,
             "telefono": self.telefono,
@@ -63,10 +64,13 @@ class Asada:
             "coordenadas_x": self.coordenadas_x,
             "coordenadas_y": self.coordenadas_y
         }
+
+    def to_dic(self):
+        return self.to_dict()
     
     def __str__(self):
         return(
-            f"ID Asada: {self.id_Asada}\n"
+            f"ID Asada: {self.id_asada}\n"
             f"Operador: {self.operador}\n"
             f"Provincia: {self.provincia}\n"
             f"Cantón: {self.canton}\n"
