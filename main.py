@@ -1,7 +1,12 @@
 from services.api_aresep import obtener_objetos_asadas
 from storage.archivo_asadas import guardar_asadas, leer_asada_por_posicion
 from structures.arbol_binario import arbol_binario_de_busqueda
-from storage.archivo_arbol import guardar_arbol, cargar_arbol
+from storage.archivo_arbol import guardar_arbol
+from structures.listas_geograficas import lista_geografica
+from storage.archivo_geografico import (
+    guardar_estructura_geografica,
+    cargar_estructura_geografica
+)
 
 def construir_arbol(lista_asadas, posiciones):
     arbol = arbol_binario_de_busqueda()
@@ -11,6 +16,15 @@ def construir_arbol(lista_asadas, posiciones):
         arbol.insertar(asada.id_asada, posicion)
     
     return arbol
+
+def construir_estructura_geografica(lista_asadas, posiciones):
+    estructura = lista_geografica()
+    
+    for asada in lista_asadas:
+        posicion = posiciones[asada.id_asada]
+        estructura.insertar_asada(asada, posicion)
+        
+    return estructura
  
 def main():
     asadas = obtener_objetos_asadas()
@@ -22,30 +36,62 @@ def main():
 
     arbol = construir_arbol(asadas, posiciones)
     guardar_arbol(arbol)
-    
     print("Árbol binario guardado en data/indice_arbol.dat")
     
-    arbol_cargado = cargar_arbol()
+    estructura_geografica = construir_estructura_geografica(asadas, posiciones)
+    guardar_estructura_geografica(estructura_geografica)
+    print("Estructura geográfica guardada en data/estructura_geografica.dat")
     
-    id_buscado = input("\nDigite el id_Asada que desea buscar: ").strip()
-
-    if not id_buscado.isdigit():
-        print("El id_Asada debe ser un número.")
+    estructura = cargar_estructura_geografica()
+    
+    print("\nProvincias disponibles:")
+    provincias = estructura.obtener_provincias()
+    
+    for provincia in provincias:
+        print("-", provincia)
+        
+    provincia = input("\nDigite la provincia: ").strip().upper()
+    cantones = estructura.obtener_cantones(provincia)
+    
+    if not cantones:
+        print("No se encontraron cantones para esa provincia.")
         return
     
-    posicion = arbol_cargado.buscar(id_buscado)
+    print("\nCantones disponibles:")
+    for canton in cantones:
+        print("-", canton)
+        
+    canton = input("Digite el cantón: ").strip().upper()
+    distritos = estructura.obtener_distritos(provincia, canton)
     
-    if posicion is None:
-        print("No se encontró una ASADA con ese id.")
-    else:
-        asada_encontrada = leer_asada_por_posicion(posicion)
-
-        print("\nASADA leída desde archivo binario:")
-        print("ID:", asada_encontrada["id_asada"])
-        print("Operador:", asada_encontrada["operador"])
-        print("Provincia:", asada_encontrada["provincia"])
-        print("Cantón:", asada_encontrada["canton"])
-        print("Distrito:", asada_encontrada["distrito"])    
+    if not distritos:
+        print("No se encontraron distritos para ese cantón.")
+        return 
+    
+    print("\nDistritos disponibles:")
+    for distrito in distritos:
+        print("-", distrito)
+        
+    distrito = input("\nDigite el distrito: ").strip().upper()
+    asadas_distrito = estructura.obtener_asadas_por_distrito(
+        provincia,
+        canton,
+        distrito
+    )
+    
+    if not asadas_distrito:
+        print("No se encontraron ASADAS para ese distrito.")
+        return
+    
+    print("\nASADAS encontradas:")
+    for referencia in asadas_distrito:
+        asada = leer_asada_por_posicion(referencia["posicion_registro"])
+        print("-------------------------------------------")
+        print("ID:", asada["id_asada"])
+        print("Operador:", asada["operador"])
+        print("Provincia:", asada["provincia"])
+        print("Cantón:", asada["canton"])
+        print("Distrito:", asada["distrito"])    
     
 if __name__ == "__main__":
     main()
