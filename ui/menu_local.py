@@ -1,5 +1,6 @@
 from services.sincronizador import sincronizar_datos, cargar_estructuras
 from storage.archivo_asadas import leer_asada_por_posicion
+from services.mapa_service import generar_mapa_asada
 
 def mostrar_asada(asada):
     print("-----------------------------------")
@@ -88,6 +89,28 @@ def buscar_por_ubicacion():
     for referencia in referencias:
         asada = leer_asada_por_posicion(referencia["posicion_registro"])
         mostrar_asada(asada)
+
+def generar_mapa_por_id():
+    try:
+        arbol, estructura = cargar_estructuras()
+    except FileNotFoundError:
+        print("Primero debe sincronizar los datos.")
+        return
+
+    id_asada = input("Digite el id_Asada para generar el mapa: ").strip()
+
+    if not id_asada.isdigit():
+        print("El id_Asada debe ser un número.")
+        return
+
+    posicion = arbol.buscar(id_asada)
+
+    if posicion is None:
+        print("No se encontró una ASADA con ese id.")
+        return
+
+    asada = leer_asada_por_posicion(posicion)
+    generar_mapa_asada(asada)
         
 def mostrar_menu_local():
     while True:
@@ -95,7 +118,8 @@ def mostrar_menu_local():
         print("1. Sincronizar datos")
         print("2. Buscar ASADA por id_Asada")
         print("3. Buscar ASADAS por provincia, cantón, distrito")
-        print("4. Salir")
+        print("4. Generar mapa por id_Asada")
+        print("5. Salir")
         
         opcion = input("Seleccion una opción: ").strip()
         
@@ -106,6 +130,8 @@ def mostrar_menu_local():
         elif opcion == "3":
             buscar_por_ubicacion()
         elif opcion == "4":
+            generar_mapa_por_id()
+        elif opcion == "5":
             print("Saliendo del sistema...")
             break
         else:
