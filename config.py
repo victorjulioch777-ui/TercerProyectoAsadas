@@ -11,3 +11,6 @@ ruta_archivo_geografico = data_dir / "estructura_geografica.dat"
 ruta_mapa = data_dir / "mapa.html"
 
 data_dir.mkdir(exist_ok = True)
+
+HOST = "127.0.0.1"
+PORT = 5000
