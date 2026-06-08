@@ -14,3 +14,15 @@ data_dir.mkdir(exist_ok = True)
 
 HOST = "127.0.0.1"
 PORT = 5000
+
+#Agregar mas constantes para que no hayan strings quemados y usarlas en todos los lados posibles
+#Crear mas diccionarios si es lo considera necesario
+CLAVES_ASADAS = {
+    "ID": "ID",
+    "OPERADOR": "Operador",
+}
+
+OPCIONES_CLIENTE = {
+    "BUSCAR_ID": "1",
+    
+}

@@ -1,3 +1,5 @@
+import config
+
 class Asada:
     def __init__(
         self,
@@ -30,6 +32,7 @@ class Asada:
         self.coordenadas_x = float(str(coordenadas_x).strip())
         self.coordenadas_y = float(str(coordenadas_y).strip())
         
+    #Investigar si realmente es necesario que este metodo sea estatico, o si se puede usar el constructor directamente para crear la instancia a partir del diccionario, palabras clave, inversion de dependencias
     @staticmethod
     def from_dict(data):
         return Asada(
@@ -70,7 +73,7 @@ class Asada:
     
     def __str__(self):
         return(
-            f"ID Asada: {self.id_asada}\n"
+            f"{config.CLAVES_ASADAS['ID_ASADA']}: {self.id_asada}\n"
             f"Operador: {self.operador}\n"
             f"Provincia: {self.provincia}\n"
             f"Cantón: {self.canton}\n"

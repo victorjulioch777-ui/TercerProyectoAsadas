@@ -1,6 +1,7 @@
 import socket
 import sys
 from pathlib import Path
+import config
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -27,7 +28,11 @@ def mostrar_menu_cliente(cliente):
         
         opcion = input("Seleccione una opcion: ").strip()
         
-        if opcion == "1":
+        #Cambiar los demas magic numbers
+        """
+        Un magic number es un valor literal que aparece en el código sin una explicación clara de su significado. En este caso, los números "1", "2" y "3" representan las opciones del menú, pero no es evidente para alguien que lea el código lo que significan sin contexto adicional. Al usar constantes definidas en el archivo de configuración, como config.OPCIONES_CLIENTE["BUSCAR_ID"], se mejora la legibilidad y mantenibilidad del código, ya que el significado de cada opción queda claro y centralizado en un solo lugar.a
+        """
+        if opcion == config.OPCIONES_CLIENTE["BUSCAR_ID"]:
             buscar_por_id(cliente)
         elif opcion == "2":
             buscar_por_ubicacion(cliente)
@@ -88,8 +93,8 @@ def mostrar_respuesta(respuesta):
         
 def mostrar_asada(asada):
     print("-----------------------------------")
-    print("ID:", asada["id_asada"])
-    print("Operador:", asada["operador"])
+    print(f"{config.CLAVES_ASADAS["ID"]}:", asada["id_asada"])
+    print(f"{config.CLAVES_ASADAS["OPERADOR"]}:", asada["operador"])
     print("Provincia:", asada["provincia"])
     print("Cantón:", asada["canton"])
     print("Distrito:", asada["distrito"])

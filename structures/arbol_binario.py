@@ -15,17 +15,21 @@ class arbol_binario_de_busqueda:
     def _insertar_iterativo(self, nuevo_nodo):
         nodo_actual = self.raiz
 
-        while True:
+        while True:   
+            
             if nuevo_nodo.id_asada < nodo_actual.id_asada:
+                
                 if nodo_actual.izquierdo is None:
                     nodo_actual.izquierdo = nuevo_nodo
                     return
                 nodo_actual = nodo_actual.izquierdo
+                
             elif nuevo_nodo.id_asada > nodo_actual.id_asada:
                 if nodo_actual.derecho is None:
                     nodo_actual.derecho = nuevo_nodo
                     return
                 nodo_actual = nodo_actual.derecho
+                
             else:
                 nodo_actual.posicion_registro = nuevo_nodo.posicion_registro
                 return

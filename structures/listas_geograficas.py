@@ -20,6 +20,8 @@ class lista_geografica:
             posicion_registro
         )
         
+    #Separar esto en funciones que solo tengan 1 responsabilidad
+    #1 para obtener, otra para crear, otra para insertar 
     def _obtener_o_crear_provincia(self, nombre):
         actual = self.provincias
         anterior = None
@@ -39,6 +41,7 @@ class lista_geografica:
         
         return nuevo 
     
+    #Mismo que lo de arriba
     def _obtener_o_crear_canton(self, provincia, nombre):
         actual = provincia.cantones
         anterior = None
@@ -58,6 +61,7 @@ class lista_geografica:
             
         return nuevo
     
+    #Mismo que lo de arriba
     def _obtener_o_crear_distrito(self, canton, nombre):
         actual = canton.distritos
         anterior = None
@@ -98,7 +102,8 @@ class lista_geografica:
         actual = self.provincias
         
         while actual is not None:
-            resultado.append(actual.nombre)
+            resultado.append(actual.nombre) 
+            #Esta logica del while se repetire varias veces en este archivo, se puede abstraer a una función aparte que reciba el nodo inicial y una función para extraer el dato que se quiere guardar en el resultado
             actual = actual.siguiente
             
         return resultado
@@ -169,7 +174,7 @@ class lista_geografica:
     def _buscar_provincia(self, nombre):
         actual = self.provincias
         
-        while actual is not None:
+        while actual is not None: #Este while se repite varias veces, se puede abstraer a una función aparte que reciba el nodo inicial y una función para comparar el nombre con el nodo actual
             if actual.nombre == nombre:
                 return actual
             actual = actual.siguiente

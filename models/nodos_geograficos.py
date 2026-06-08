@@ -3,21 +3,27 @@ class nodo_asada_geografica:
         self.id_asada = int(id_asada)
         self.posicion_registro = posicion_registro
         self.siguiente = None
-        
-class nodo_distrito:
+
+
+class nodo_geografico:
     def __init__(self, nombre):
         self.nombre = nombre
-        self.asadas = None
         self.siguiente = None
-        
-class nodo_canton:
+
+
+class nodo_provincia(nodo_geografico):
     def __init__(self, nombre):
-        self.nombre = nombre
-        self.distritos = None
-        self.siguiente = None
-        
-class nodo_provincia:
-    def __init__(self, nombre):
-        self.nombre = nombre
+        super().__init__(nombre)
         self.cantones = None
-        self.siguiente = None
+
+
+class nodo_canton(nodo_geografico):
+    def __init__(self, nombre):
+        super().__init__(nombre)
+        self.distritos = None
+
+
+class nodo_distrito(nodo_geografico):
+    def __init__(self, nombre):
+        super().__init__(nombre)
+        self.asadas = None
