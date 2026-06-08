@@ -16,6 +16,7 @@ def atender_cliente(socket_cliente, direccion):
             
             accion = solicitud.get("accion")
             
+            #Investigar como usar el patron de diseño reducer para evitar este if else gigante, o al menos abstraer cada caso a una función aparte para que sea mas legible
             if accion == "buscar_id":
                 respuesta = procesar_busqueda_id(solicitud, arbol)
             elif accion == "buscar_ubicacion":
@@ -38,6 +39,7 @@ def atender_cliente(socket_cliente, direccion):
     except Exception as error:
         print("Error atendiendo cliente:", error)
     finally:
+        #Sale blanco el close por que no esta typado
         socket_cliente.close()
         print(f"Cliente desconectado: {direccion}")
         
@@ -47,6 +49,7 @@ def procesar_busqueda_id(solicitud, arbol):
     posicion = arbol.buscar(id_asada)
     
     if posicion is None:
+        #Strings quemados
         return {
             "estado": "error",
             "mensaje": "No se encontró una ASADA con ese id."
@@ -60,10 +63,13 @@ def procesar_busqueda_id(solicitud, arbol):
     }
     
 def procesar_busqueda_ubicacion(solicitud, estrucutura):
+    #strings quemados, se pueden abstraer a constantes o a un archivo de configuración
     provincia = solicitud.get("provincia", "").strip().upper()
     canton = solicitud.get("canton", "").strip().upper()
     distrito = solicitud.get("distrito", "").strip().upper()
     
+    
+    #estructura no esta typada
     referencias = estrucutura.obtener_asadas_por_distrito(
         provincia,
         canton,

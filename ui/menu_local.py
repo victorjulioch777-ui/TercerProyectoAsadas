@@ -1,9 +1,11 @@
 from services.sincronizador import sincronizar_datos, cargar_estructuras
 from storage.archivo_asadas import leer_asada_por_posicion
 from services.mapa_service import generar_mapa_asada
+from structures.listas_geograficas import lista_geografica
 
 def mostrar_asada(asada):
     print("-----------------------------------")
+    #Strings quemados
     print("ID:", asada["id_asada"])
     print("Operador:", asada["operador"])
     print("Provincia:", asada["provincia"])
@@ -15,7 +17,7 @@ def mostrar_asada(asada):
     
 def buscar_id():
     try:
-        arbol, estructura = cargar_estructuras()
+        arbol= cargar_estructuras()
     except FileNotFoundError:
         print("Primero debe sincronizar los datos.")
         return 
@@ -26,6 +28,7 @@ def buscar_id():
         print("El id_Asada debe ser un número.")
         return 
     
+    #Typar estos para que no salga en blanco todo feo
     posicion = arbol.buscar(id_asada)
 
     if posicion is None:
@@ -39,7 +42,7 @@ def buscar_id():
     
 def buscar_por_ubicacion():
     try:
-        arbol, estructura = cargar_estructuras()
+        estructura:lista_geografica = cargar_estructuras()
     except FileNotFoundError:
         print("Primero debe sincronizar los datos.")
         return
@@ -92,7 +95,7 @@ def buscar_por_ubicacion():
 
 def generar_mapa_por_id():
     try:
-        arbol, estructura = cargar_estructuras()
+        arbol = cargar_estructuras()
     except FileNotFoundError:
         print("Primero debe sincronizar los datos.")
         return
@@ -123,6 +126,7 @@ def mostrar_menu_local():
         
         opcion = input("Seleccion una opción: ").strip()
         
+        #Magic number
         if opcion == "1":
             sincronizar_datos()
         elif opcion == "2":
