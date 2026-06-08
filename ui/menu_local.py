@@ -105,7 +105,8 @@ def generar_mapa_por_id():
     if not id_asada.isdigit():
         print("El id_Asada debe ser un número.")
         return
-
+    
+    #Typar estos para que no salga en blanco todo feo
     posicion = arbol.buscar(id_asada)
 
     if posicion is None:
