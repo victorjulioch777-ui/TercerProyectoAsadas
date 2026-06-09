@@ -1,7 +1,6 @@
 from services.sincronizador import sincronizar_datos, cargar_estructuras
 from storage.archivo_asadas import leer_asada_por_posicion
 from services.mapa_service import generar_mapa_asada
-from structures.listas_geograficas import lista_geografica
 
 def mostrar_asada(asada):
     print("-----------------------------------")
@@ -17,7 +16,7 @@ def mostrar_asada(asada):
     
 def buscar_id():
     try:
-        arbol= cargar_estructuras()
+        arbol, estructura = cargar_estructuras()
     except FileNotFoundError:
         print("Primero debe sincronizar los datos.")
         return 
@@ -42,7 +41,7 @@ def buscar_id():
     
 def buscar_por_ubicacion():
     try:
-        estructura:lista_geografica = cargar_estructuras()
+        arbol, estructura = cargar_estructuras()
     except FileNotFoundError:
         print("Primero debe sincronizar los datos.")
         return
@@ -95,7 +94,7 @@ def buscar_por_ubicacion():
 
 def generar_mapa_por_id():
     try:
-        arbol = cargar_estructuras()
+        arbol, estructura = cargar_estructuras()
     except FileNotFoundError:
         print("Primero debe sincronizar los datos.")
         return
