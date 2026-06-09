@@ -1,142 +1,219 @@
+from typing import Any, Optional, Tuple
+
+import config
+
 from services.sincronizador import sincronizar_datos, cargar_estructuras
 from storage.archivo_asadas import leer_asada_por_posicion
 from services.mapa_service import generar_mapa_asada
+from structures.arbol_binario import arbol_binario_de_busqueda
+from structures.listas_geograficas import lista_geografica
 
-def mostrar_asada(asada):
-    print("-----------------------------------")
-    #Strings quemados
-    print("ID:", asada["id_asada"])
-    print("Operador:", asada["operador"])
-    print("Provincia:", asada["provincia"])
-    print("Cantón:", asada["canton"])
-    print("Distrito:", asada["distrito"])
-    print("Teléfono:", asada["telefono"])
-    print("Correo:", asada["correo"])
-    print("Tipo de sistema:", asada["tipo_sistema"])
-    
-def buscar_id():
+
+AsadaDict = dict[str, Any]
+ReferenciaAsada = dict[str, Any]
+Estructuras = Tuple[arbol_binario_de_busqueda, lista_geografica]
+
+
+def cargar_estructuras_seguro() -> Optional[Estructuras]:
     try:
         arbol, estructura = cargar_estructuras()
+        return arbol, estructura
+
     except FileNotFoundError:
-        print("Primero debe sincronizar los datos.")
-        return 
-    
-    id_asada = input("Digite el id_Asada: ").strip()
-    
+        print(config.MENSAJE_SIN_DATOS)
+        return None
+
+
+def pedir_id_asada(mensaje: str = config.PROMPT_ID_ASADA) -> Optional[str]:
+    id_asada = input(mensaje).strip()
+
     if not id_asada.isdigit():
-        print("El id_Asada debe ser un número.")
-        return 
+        print(config.MENSAJE_ID_INVALIDO)
+        return None
+
+    return id_asada
+
+
+def buscar_asada_en_arbol(
+    arbol: arbol_binario_de_busqueda,
+    id_asada: str
+) -> Optional[AsadaDict]:
     
-    #Typar estos para que no salga en blanco todo feo
     posicion = arbol.buscar(id_asada)
 
     if posicion is None:
-        print("No se encontró una ASADA con ese id.")
-        return
+        print(config.MENSAJE_ASADA_NO_ENCONTRADA)
+        return None
 
-    asada = leer_asada_por_posicion(posicion)
+    return leer_asada_por_posicion(posicion)
+
+
+def mostrar_asada(asada: AsadaDict) -> None:
+    print("-----------------------------------")
+
+    for campo, etiqueta in config.ETIQUETAS_ASADA.items():
+        print(f"{etiqueta}: {asada.get(campo, '')}")
+
+
+def mostrar_lista(titulo: str, elementos: list[str]) -> None:
+    print(f"\n{titulo}")
+
+    for elemento in elementos:
+        print("-", elemento)
+
+
+def obtener_referencias_por_ubicacion(
+    estructura: lista_geografica,
+    provincia: str,
+    canton: str,
+    distrito: str
+) -> list[ReferenciaAsada]:
     
-    print("\nASADA encontrada:")
-    mostrar_asada(asada)
-    
-def buscar_por_ubicacion():
-    try:
-        arbol, estructura = cargar_estructuras()
-    except FileNotFoundError:
-        print("Primero debe sincronizar los datos.")
-        return
-    
-    print("\nProvincias disponibles:")
-    for provincia in estructura.obtener_provincias():
-        print("-", provincia)
-        
-    provincia = input("\nDigite la provincia: ").strip().upper()
-    
-    cantones = estructura.obtener_cantones(provincia)
-    
-    if not cantones:
-        print("No se encontraron cantones para esa provincia.")
-        return 
-    
-    print("\nCantones disponibles:")
-    for canton in cantones:
-        print("-", canton)
-        
-    canton = input("\nDigite el cantón: ").strip().upper()
-    
-    distritos = estructura.obtener_distritos(provincia, canton)
-    
-    if not distritos:
-        print("No se encontraron distrios para ese cantón.")
-        return
-    
-    print("\nDistritos disponibles:")
-    for distrito in distritos:
-        print("-", distrito)
-        
-    distrito = input("\nDigite distrito: ").strip().upper()
-    
-    referencias = estructura.obtener_asadas_por_distrito(
+    return estructura.obtener_asadas_por_distrito(
         provincia,
         canton,
         distrito
-    ) 
-    
-    if not referencias:
-        print("No se encontraron ASADAS para ese distrito.")
-        return 
-    
-    print("\nASADAS encontradas:")
+    )
+
+
+def mostrar_asadas_desde_referencias(
+    referencias: list[ReferenciaAsada]
+) -> None:
     
     for referencia in referencias:
-        asada = leer_asada_por_posicion(referencia["posicion_registro"])
+        posicion = referencia[config.CAMPO_POSICION_REGISTRO]
+        asada = leer_asada_por_posicion(posicion)
         mostrar_asada(asada)
 
-def generar_mapa_por_id():
-    try:
-        arbol, estructura = cargar_estructuras()
-    except FileNotFoundError:
-        print("Primero debe sincronizar los datos.")
-        return
 
-    id_asada = input("Digite el id_Asada para generar el mapa: ").strip()
-
-    if not id_asada.isdigit():
-        print("El id_Asada debe ser un número.")
-        return
+def buscar_id() -> None:
     
-    #Typar estos para que no salga en blanco todo feo
-    posicion = arbol.buscar(id_asada)
+    estructuras = cargar_estructuras_seguro()
 
-    if posicion is None:
-        print("No se encontró una ASADA con ese id.")
+    if estructuras is None:
         return
 
-    asada = leer_asada_por_posicion(posicion)
+    arbol, _ = estructuras
+
+    id_asada = pedir_id_asada()
+
+    if id_asada is None:
+        return
+
+    asada = buscar_asada_en_arbol(arbol, id_asada)
+
+    if asada is None:
+        return
+
+    print("\nASADA encontrada:")
+    mostrar_asada(asada)
+
+
+def buscar_por_ubicacion() -> None:
+    
+    estructuras = cargar_estructuras_seguro()
+
+    if estructuras is None:
+        return
+
+    _, estructura = estructuras
+
+    provincias = estructura.obtener_provincias()
+    mostrar_lista("Provincias disponibles:", provincias)
+
+    provincia = input(f"\n{config.PROMPT_PROVINCIA}").strip().upper()
+
+    cantones = estructura.obtener_cantones(provincia)
+
+    if not cantones:
+        print(config.MENSAJE_CANTONES_NO_ENCONTRADOS)
+        return
+
+    mostrar_lista("Cantones disponibles:", cantones)
+
+    canton = input(f"\n{config.PROMPT_CANTON}").strip().upper()
+
+    distritos = estructura.obtener_distritos(provincia, canton)
+
+    if not distritos:
+        print(config.MENSAJE_DISTRITOS_NO_ENCONTRADOS)
+        return
+
+    mostrar_lista("Distritos disponibles:", distritos)
+
+    distrito = input(f"\n{config.PROMPT_DISTRITO}").strip().upper()
+
+    referencias = obtener_referencias_por_ubicacion(
+        estructura,
+        provincia,
+        canton,
+        distrito
+    )
+
+    if not referencias:
+        print(config.MENSAJE_ASADAS_NO_ENCONTRADAS_DISTRITO)
+        return
+
+    print("\nASADAS encontradas:")
+    mostrar_asadas_desde_referencias(referencias)
+
+
+def generar_mapa_por_id() -> None:
+    estructuras = cargar_estructuras_seguro()
+
+    if estructuras is None:
+        return
+
+    arbol, _ = estructuras
+
+    id_asada = pedir_id_asada(config.PROMPT_ID_ASADA_MAPA)
+
+    if id_asada is None:
+        return
+
+    asada = buscar_asada_en_arbol(arbol, id_asada)
+
+    if asada is None:
+        return
+
     generar_mapa_asada(asada)
-        
-def mostrar_menu_local():
-    while True:
-        print("\n====Sistema de consulta de ASADAS====")
-        print("1. Sincronizar datos")
-        print("2. Buscar ASADA por id_Asada")
-        print("3. Buscar ASADAS por provincia, cantón, distrito")
-        print("4. Generar mapa por id_Asada")
-        print("5. Salir")
-        
-        opcion = input("Seleccion una opción: ").strip()
-        
-        #Magic number
-        if opcion == "1":
-            sincronizar_datos()
-        elif opcion == "2":
-            buscar_id()
-        elif opcion == "3":
-            buscar_por_ubicacion()
-        elif opcion == "4":
-            generar_mapa_por_id()
-        elif opcion == "5":
-            print("Saliendo del sistema...")
-            break
-        else:
-            print("Opción inválida.")
+
+
+def mostrar_opciones_menu() -> None:
+    print("\n==== Sistema de consulta de ASADAS ====")
+    print(f"{config.OPCION_SINCRONIZAR}. Sincronizar datos")
+    print(f"{config.OPCION_BUSCAR_ID}. Buscar ASADA por id_Asada")
+    print(f"{config.OPCION_BUSCAR_UBICACION}. Buscar ASADAS por provincia, cantón, distrito")
+    print(f"{config.OPCION_GENERAR_MAPA}. Generar mapa por id_Asada")
+    print(f"{config.OPCION_SALIR}. Salir")
+
+
+def procesar_opcion_menu(opcion: str) -> bool:
+    acciones_menu = {
+        config.OPCION_SINCRONIZAR: sincronizar_datos,
+        config.OPCION_BUSCAR_ID: buscar_id,
+        config.OPCION_BUSCAR_UBICACION: buscar_por_ubicacion,
+        config.OPCION_GENERAR_MAPA: generar_mapa_por_id
+    }
+
+    if opcion == config.OPCION_SALIR:
+        print(config.MENSAJE_SALIENDO)
+        return False
+
+    accion = acciones_menu.get(opcion)
+
+    if accion is None:
+        print(config.MENSAJE_OPCION_INVALIDA)
+        return True
+
+    accion()
+    return True
+
+
+def mostrar_menu_local() -> None:
+    continuar = True
+
+    while continuar:
+        mostrar_opciones_menu()
+        opcion = input(config.PROMPT_OPCION).strip()
+        continuar = procesar_opcion_menu(opcion)

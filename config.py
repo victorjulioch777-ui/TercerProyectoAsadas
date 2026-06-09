@@ -15,14 +15,118 @@ data_dir.mkdir(exist_ok = True)
 HOST = "127.0.0.1"
 PORT = 5000
 
-#Agregar mas constantes para que no hayan strings quemados y usarlas en todos los lados posibles
-#Crear mas diccionarios si es lo considera necesario
 CLAVES_ASADAS = {
     "ID": "ID",
     "OPERADOR": "Operador",
+    "PROVINCIA": "Provincia",
+    "CANTON": "Cantón",
+    "DISTRITO": "Distrito",
+    "TELEFONO": "Teléfono",
+    "CORREO": "Correo",
+    "TIPO_DE_SISTEMA": "Tipo de sistema"
 }
 
 OPCIONES_CLIENTE = {
     "BUSCAR_ID": "1",
-    
+    "BUSCAR_UBICACION": "2",
+    "SALIR": "3"
 }
+
+CLAVES_JSON_ASADA = {
+    "ID_ASADA": "id_Asada",
+    "ID_OBJETO": "id_Objecto",
+    "OPERADOR": "operador",
+    "TELEFONO": "telefono",
+    "FAX": "fax",
+    "CORREO": "correo",
+    "TIPO_SISTEMA": "tipoSistema",
+    "PROVINCIA": "provincia",
+    "CANTON": "canton",
+    "DISTRITO": "distrito",
+    "CODIGO_DTA": "codigoDTA",
+    "COORDENADA_X": "coordenadaX",
+    "COORDENADA_Y": "coordenadaY"
+}
+
+CLAVES_ASADA = {
+    "ID_ASADA": "id_asada",
+    "ID_OBJETO": "id_objeto",
+    "OPERADOR": "operador",
+    "TELEFONO": "telefono",
+    "FAX": "fax",
+    "CORREO": "correo",
+    "TIPO_SISTEMA": "tipo_sistema",
+    "PROVINCIA": "provincia",
+    "CANTON": "canton",
+    "DISTRITO": "distrito",
+    "CODIGO_DTA": "codigo_dta",
+    "COORDENADA_X": "coordenadas_x",
+    "COORDENADA_Y": "coordenadas_y"
+}
+
+CAMPO_ACCION = "accion"
+CAMPO_ESTADO = "estado"
+CAMPO_MENSAJE = "mensaje"
+CAMPO_DATOS = "datos"
+
+ESTADO_OK = "ok"
+ESTADO_ERROR = "error"
+
+ACCION_BUSCAR_ID = "buscar_id"
+ACCION_BUSCAR_UBICACION = "buscar_ubicacion"
+ACCION_SALIR = "salir"
+
+CAMPO_ID_ASADA = "id_asada"
+CAMPO_PROVINCIA = "provincia"
+CAMPO_CANTON = "canton"
+CAMPO_DISTRITO = "distrito"
+CAMPO_POSICION_REGISTRO = "posicion_registro"
+
+MENSAJE_CONEXION_CERRADA = "Conexión cerrada."
+MENSAJE_ACCION_INVALIDA = "Acción no válida."
+MENSAJE_ASADA_NO_ENCONTRADA = "No se encontró una ASADA con ese id."
+MENSAJE_UBICACION_SIN_ASADAS = "No se encontraron ASADAS para esa ubicación."  
+
+ATR_PROVINCIAS = "provincias"
+ATR_CANTONES = "cantones"
+ATR_DISTRITOS = "distritos"
+ATR_ASADAS = "asadas"
+
+CAMPO_OPERADOR = "operador"
+CAMPO_TELEFONO = "telefono"
+CAMPO_CORREO = "correo"
+CAMPO_TIPO_DE_SISTEMA = "tipo_sistema"
+CAMPO_POSICION_REGISTRO = "posicion_registro"
+
+ETIQUETAS_ASADA = {
+    CAMPO_ID_ASADA: "ID",
+    CAMPO_OPERADOR: "Operador",
+    CAMPO_PROVINCIA: "Provincia",
+    CAMPO_CANTON: "Cantón",
+    CAMPO_DISTRITO: "Distrito",
+    CAMPO_TELEFONO: "Teléfono",
+    CAMPO_CORREO: "Correo",
+    CAMPO_TIPO_DE_SISTEMA: "Tipo de sistema"
+}
+
+OPCION_SINCRONIZAR = "1"
+OPCION_BUSCAR_ID = "2"
+OPCION_BUSCAR_UBICACION = "3"
+OPCION_GENERAR_MAPA = "4"
+OPCION_SALIR = "5"
+
+
+MENSAJE_SIN_DATOS = "Primero debe sincronizar los datos."
+MENSAJE_ID_INVALIDO = "El id_Asada debe ser un número."
+MENSAJE_CANTONES_NO_ENCONTRADOS = "No se encontraron cantones para esa provincia."
+MENSAJE_DISTRITOS_NO_ENCONTRADOS = "No se encontraron distritos para ese cantón."
+MENSAJE_ASADAS_NO_ENCONTRADAS_DISTRITO = "No se encontraron asadas para ese distrito."
+MENSAJE_SALIENDO = "Saliendo del sistema..."
+MENSAJE_OPCION_INVALIDA = "Opción invalida."
+
+PROMPT_OPCION = "Seleccione una opción: "
+PROMPT_ID_ASADA = "Digite el id_Asada: "
+PROMPT_ID_ASADA_MAPA = "Digite el id_Asada para generar el mapa: "
+PROMPT_PROVINCIA = "Digite la provincia: "
+PROMPT_CANTON = "Digite el cantón: "
+PROMPT_DISTRITO = "Digite el distrito: "

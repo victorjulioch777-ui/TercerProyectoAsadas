@@ -1,12 +1,38 @@
+from socket import socket
+from typing import Any, Callable
+
+import config
+
 from server.protocolo import recibir_mensaje, enviar_mensaje
 from services.sincronizador import cargar_estructuras
 from storage.archivo_asadas import leer_asada_por_posicion
 
-def atender_cliente(socket_cliente, direccion):
-    print(f"Cliente conectado: {direccion}")
+def crear_respuesta_ok(datos = None, mensaje = None):
+    respuesta = {
+        config.CAMPO_ESTADO: config.ESTADO_OK
+    }
     
+    if datos is not None:
+        respuesta[config.CAMPO_DATOS] = datos
+    
+    if mensaje is not None:
+        respuesta[config.CAMPO_MENSAJE] = mensaje
+        
+    return respuesta
+
+def crear_respuesta_error(mensaje):
+    return {
+        config.CAMPO_ESTADO: config.ESTADO_ERROR,
+        config.CAMPO_MENSAJE: mensaje
+    }
+
+def atender_cliente(socket_cliente, direccion):
+    print(f"Cliente conectado desde: {direccion}")
+        
     try:
         arbol, estructura = cargar_estructuras()
+        
+        despachador_acciones = crear_despachador(arbol, estructura)
         
         while True:
             solicitud = recibir_mensaje(socket_cliente)
@@ -14,81 +40,87 @@ def atender_cliente(socket_cliente, direccion):
             if solicitud is None:
                 break
             
-            accion = solicitud.get("accion")
+            accion = solicitud.get(config.CAMPO_ACCION)
             
-            #Investigar como usar el patron de diseño reducer para evitar este if else gigante, o al menos abstraer cada caso a una función aparte para que sea mas legible
-            if accion == "buscar_id":
-                respuesta = procesar_busqueda_id(solicitud, arbol)
-            elif accion == "buscar_ubicacion":
-                respuesta = procesar_busqueda_ubicacion(solicitud, estructura)
-            elif accion == "salir":
-                respuesta = {
-                    "estado": "ok",
-                    "mensaje": "Conexión cerrada."
-                }
-                enviar_mensaje(socket_cliente, respuesta)
-                break    
-            else:
-                respuesta = {
-                    "estado": "error", 
-                    "mensaje": "Acción no válida."
-                }
-                
+            respuesta = procesar_solicitud(
+                accion,
+                solicitud,
+                despachador_acciones
+            )
+            
             enviar_mensaje(socket_cliente, respuesta)
             
+            if accion == config.ACCION_SALIR:
+                break
     except Exception as error:
-        print("Error atendiendo cliente:", error)
+        print("Error atendiendo al cliente:", error)
+        
     finally:
-        #Sale blanco el close por que no esta typado
         socket_cliente.close()
         print(f"Cliente desconectado: {direccion}")
+
+def crear_despachador(arbol, estructura):
+    return {
+        config.ACCION_BUSCAR_ID: lambda solicitud: procesar_busqueda_id(
+            solicitud, 
+            arbol
+        ),
+        config.ACCION_BUSCAR_UBICACION: lambda solicitud: procesar_busqueda_ubicacion(
+            solicitud,
+            estructura
+        ),
+        config.ACCION_SALIR: lambda solicitud: crear_respuesta_ok(
+            mensaje = config.MENSAJE_CONEXION_CERRADA
+        )
+    }        
+    
+def procesar_solicitud(accion, solicitud, despachador_acciones):
+    funcion_procesadora = despachador_acciones.get(accion)
+    
+    if funcion_procesadora is None:
+        return crear_respuesta_error(config.MENSAJE_ACCION_INVALIDA)
+    
+    return funcion_procesadora(solicitud)   
         
 def procesar_busqueda_id(solicitud, arbol):
-    id_asada = solicitud.get("id_asada")
+    id_asada = solicitud.get(config.CAMPO_ID_ASADA)
     
     posicion = arbol.buscar(id_asada)
     
     if posicion is None:
-        #Strings quemados
-        return {
-            "estado": "error",
-            "mensaje": "No se encontró una ASADA con ese id."
-        }
+        return crear_respuesta_error(config.MENSAJE_ASADA_NO_ENCONTRADA)
             
     asada = leer_asada_por_posicion(posicion)
     
-    return {
-        "estado": "ok",
-        "datos": asada
-    }
+    return crear_respuesta_ok(datos = asada)
     
-def procesar_busqueda_ubicacion(solicitud, estrucutura):
-    #strings quemados, se pueden abstraer a constantes o a un archivo de configuración
-    provincia = solicitud.get("provincia", "").strip().upper()
-    canton = solicitud.get("canton", "").strip().upper()
-    distrito = solicitud.get("distrito", "").strip().upper()
+def procesar_busqueda_ubicacion(solicitud, estructura):
+    provincia = obtener_campo_texto(solicitud, config.CAMPO_PROVINCIA)
+    canton = obtener_campo_texto(solicitud, config.CAMPO_CANTON)
+    distrito = obtener_campo_texto(solicitud, config.CAMPO_DISTRITO)
     
-    
-    #estructura no esta typada
-    referencias = estrucutura.obtener_asadas_por_distrito(
+    referencias = estructura.obtener_asadas_por_distrito(
         provincia,
         canton,
         distrito
     )
     
     if not referencias:
-        return {
-            "estado": "error",
-            "mensaje": "No se encontraron ASADAS para esa ubicación."
-        }
+        return crear_respuesta_error(config.MENSAJE_UBICACION_SIN_ASADAS)
         
+    asadas = obtener_asadas_desde_referencias(referencias)
+    
+    return crear_respuesta_ok(datos = asadas)
+
+def obtener_campo_texto(solicitud, campo):
+    return solicitud.get(campo, "").strip().upper()
+
+def obtener_asadas_desde_referencias(referencias):
     asadas = []
     
     for referencia in referencias:
-        asada = leer_asada_por_posicion(referencia["posicion_registro"])
+        posicion = referencia[config.CAMPO_POSICION_REGISTRO]
+        asada = leer_asada_por_posicion(posicion)
         asadas.append(asada)
-        
-    return {
-        "estado": "ok", 
-        "datos": asadas
-    }
+    
+    return asadas

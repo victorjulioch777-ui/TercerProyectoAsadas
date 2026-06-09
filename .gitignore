@@ -4,3 +4,7 @@ env/
 __pycache__/
 *.py[cod]
 *$py.class
+
+.agents/
+.codex/
+.claude/

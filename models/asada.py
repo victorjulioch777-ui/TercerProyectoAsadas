@@ -3,7 +3,7 @@ import config
 class Asada:
     def __init__(
         self,
-        id_Asada,
+        id_asada,
         id_objeto,
         operador,
         telefono,
@@ -17,7 +17,7 @@ class Asada:
         coordenadas_x,
         coordenadas_y
     ):
-        self.id_asada = int(id_Asada)
+        self.id_asada = int(id_asada)
         self.id_Asada = self.id_asada
         self.id_objeto = int(id_objeto)
         self.operador = operador
@@ -32,40 +32,45 @@ class Asada:
         self.coordenadas_x = float(str(coordenadas_x).strip())
         self.coordenadas_y = float(str(coordenadas_y).strip())
         
-    #Investigar si realmente es necesario que este metodo sea estatico, o si se puede usar el constructor directamente para crear la instancia a partir del diccionario, palabras clave, inversion de dependencias
-    @staticmethod
-    def from_dict(data):
-        return Asada(
-            id_Asada=data.get("id_Asada"),
-            id_objeto=data.get("id_Objecto"),
-            operador=data.get("operador"),
-            telefono=data.get("telefono"),
-            fax=data.get("fax"),
-            correo=data.get("correo"),
-            tipo_sistema=data.get("tipoSistema"),
-            provincia=data.get("provincia"),
-            canton=data.get("canton"),
-            distrito=data.get("distrito"),
-            codigo_dta=data.get("codigoDTA"),
-            coordenadas_x=data.get("coordenadaX"),
-            coordenadas_y=data.get("coordenadaY")
+    @classmethod
+    def from_dict(cls, data):
+        
+        claves = config.CLAVES_JSON_ASADA
+        
+        return cls(
+            id_asada=data.get(claves["ID_ASADA"]),
+            id_objeto=data.get(claves["ID_OBJETO"]),
+            operador=data.get(claves["OPERADOR"]),
+            telefono=data.get(claves["TELEFONO"]),
+            fax=data.get(claves["FAX"]),
+            correo=data.get(claves["CORREO"]),
+            tipo_sistema=data.get(claves["TIPO_SISTEMA"]),
+            provincia=data.get(claves["PROVINCIA"]),
+            canton=data.get(claves["CANTON"]),
+            distrito=data.get(claves["DISTRITO"]),
+            codigo_dta=data.get(claves["CODIGO_DTA"]),
+            coordenadas_x=data.get(claves["COORDENADA_X"]),
+            coordenadas_y=data.get(claves["COORDENADA_Y"])
         )
     
     def to_dict(self):
+    
+        claves = config.CLAVES_ASADA
+    
         return {
-            "id_asada": self.id_asada,
-            "id_objeto": self.id_objeto,
-            "operador": self.operador,
-            "telefono": self.telefono,
-            "fax": self.fax,
-            "correo": self.correo,
-            "tipo_sistema": self.tipo_sistema,
-            "provincia": self.provincia,
-            "canton": self.canton,
-            "distrito": self.distrito,
-            "codigo_dta": self.codigo_dta,
-            "coordenadas_x": self.coordenadas_x,
-            "coordenadas_y": self.coordenadas_y
+            claves["ID_ASADA"]: self.id_asada,
+            claves["ID_OBJETO"]: self.id_objeto,
+            claves["OPERADOR"]: self.operador,
+            claves["TELEFONO"]: self.telefono,
+            claves["FAX"]: self.fax,
+            claves["CORREO"]: self.correo,
+            claves["TIPO_SISTEMA"]: self.tipo_sistema,
+            claves["PROVINCIA"]: self.provincia,
+            claves["CANTON"]: self.canton,
+            claves["DISTRITO"]: self.distrito,
+            claves["CODIGO_DTA"]: self.codigo_dta,
+            claves["COORDENADA_X"]: self.coordenadas_x,
+            claves["COORDENADA_Y"]: self.coordenadas_y
         }
 
     def to_dic(self):
@@ -73,12 +78,12 @@ class Asada:
     
     def __str__(self):
         return(
-            f"{config.CLAVES_ASADAS['ID_ASADA']}: {self.id_asada}\n"
-            f"Operador: {self.operador}\n"
-            f"Provincia: {self.provincia}\n"
-            f"Cantón: {self.canton}\n"
-            f"Distrito: {self.distrito}\n"
-            f"Teléfono: {self.telefono}\n"
-            f"Correo: {self.correo}\n"
-            f"Tipo de sistema: {self.tipo_sistema}"
+            f"{config.ETIQUETAS_ASADA[config.CAMPO_ID_ASADA]}: {self.id_asada}\n"
+            f"{config.ETIQUETAS_ASADA[config.CAMPO_OPERADOR]}: {self.operador}\n"
+            f"{config.ETIQUETAS_ASADA[config.CAMPO_PROVINCIA]}: {self.provincia}\n"
+            f"{config.ETIQUETAS_ASADA[config.CAMPO_CANTON]}: {self.canton}\n"
+            f"{config.ETIQUETAS_ASADA[config.CAMPO_DISTRITO]}: {self.distrito}\n"
+            f"{config.ETIQUETAS_ASADA[config.CAMPO_TELEFONO]}: {self.telefono}\n"
+            f"{config.ETIQUETAS_ASADA[config.CAMPO_CORREO]}: {self.correo}\n"
+            f"{config.ETIQUETAS_ASADA[config.CAMPO_TIPO_DE_SISTEMA]}: {self.tipo_sistema}"
         )
