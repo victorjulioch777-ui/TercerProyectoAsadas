@@ -9,6 +9,7 @@ ruta_archivo_asadas = data_dir / "asadas.dat"
 ruta_archivo_arbol = data_dir / "indice_arbol.dat"
 ruta_archivo_geografico = data_dir / "estructura_geografica.dat"
 ruta_mapa = data_dir / "mapa.html"
+ruta_metadata = data_dir / "metadata.json"
 
 data_dir.mkdir(exist_ok = True)
 
@@ -130,3 +131,13 @@ PROMPT_ID_ASADA_MAPA = "Digite el id_Asada para generar el mapa: "
 PROMPT_PROVINCIA = "Digite la provincia: "
 PROMPT_CANTON = "Digite el cantón: "
 PROMPT_DISTRITO = "Digite el distrito: "
+
+CAMPO_METADATA = "metadata"
+CAMPO_FECHA_METADATA = "date"
+
+MENSAJE_VERIFICANDO_ACTUALIZACION = "Verificando actualización de datos..."
+MENSAJE_DATOS_ACTUALIZADOS = "Los datos ya estan actualizados. No se reconstruyeron los archivos."
+MENSAJE_METADATA_NO_EXISTE = "No existe metadata local. Se reconstruirán los archivos."
+MENSAJE_METADATA_CAMBIO = "Se detectó una actualización en la metadata."
+MENSAJE_RECONSTRUYENDO = "Reconstruyendo archivos y estructuras..."
+MENSAJE_METADATA_GUARDADA = "METADATA LOCAL ACTUALIZADA CORRECTAMENTE."

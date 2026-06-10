@@ -1,0 +1,141 @@
+{
+    "success": true,
+    "status": 200,
+    "message": "Se ha completado la consulta de los datos.",
+    "source": "ARESEP",
+    "date": "2019-11-12T14:15:53.000",
+    "gridColumns": [
+        {
+            "field": "id_Asada",
+            "title": "Id Asada",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Codigo unico de la ASADA",
+            "visible": true,
+            "format": null
+        },
+        {
+            "field": "operador",
+            "title": "Operador",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Nombre de la ASADA que provee el servicio",
+            "visible": true,
+            "format": null
+        },
+        {
+            "field": "telefono",
+            "title": "Teléfono",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Número de teléfono del operador\r\n",
+            "visible": true,
+            "format": null
+        },
+        {
+            "field": "fax",
+            "title": "Fax",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Número de fax del operador\r\n",
+            "visible": true,
+            "format": null
+        },
+        {
+            "field": "correo",
+            "title": "Correo",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Correo elctrónico del operador\r\n",
+            "visible": true,
+            "format": null
+        },
+        {
+            "field": "tipoSistema",
+            "title": "Tipo de Sistema",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Tipo de sistema \r\nque utiliza el proveedor",
+            "visible": true,
+            "format": null
+        },
+        {
+            "field": "provincia",
+            "title": "Provincia",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Nombre de la provincia a la que pertenece la información geográfica\r\n",
+            "visible": true,
+            "format": null
+        },
+        {
+            "field": "canton",
+            "title": "Cantón",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Nombre del cantón al que pertenece la información geográfica\r\n",
+            "visible": true,
+            "format": null
+        },
+        {
+            "field": "distrito",
+            "title": "Distrito",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Nombre distrito al que pertenece la información geográfica\r\n",
+            "visible": true,
+            "format": null
+        },
+        {
+            "field": "codigoDTA",
+            "title": "Código DTA",
+            "width": null,
+            "filter": false,
+            "type": "number",
+            "align": "right",
+            "description": "Código  de la división territorial administrativa en el mapa de Costa Rica\r\n",
+            "visible": true,
+            "format": "{0:0}"
+        },
+        {
+            "field": "coordenadaX",
+            "title": "X",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Coordenada x en CRTM05",
+            "visible": true,
+            "format": null
+        },
+        {
+            "field": "coordenadaY",
+            "title": "Y",
+            "width": null,
+            "filter": false,
+            "type": "string",
+            "align": "left",
+            "description": "Coordenada y en CRTM05",
+            "visible": true,
+            "format": null
+        }
+    ]
+}
