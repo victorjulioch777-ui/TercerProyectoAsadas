@@ -158,3 +158,18 @@ MENSAJE_METADATA_NO_EXISTE = "No existe metadata local. Se reconstruirán los ar
 MENSAJE_METADATA_CAMBIO = "Se detectó una actualización en la metadata."
 MENSAJE_RECONSTRUYENDO = "Reconstruyendo archivos y estructuras..."
 MENSAJE_METADATA_GUARDADA = "METADATA LOCAL ACTUALIZADA CORRECTAMENTE."
+
+URL_ARESEP_ASADAS = (
+    "https://datos.aresep.go.cr/ws.datosabiertos/Services/IA/Asadas.svc/"
+    "ObtenerInformacionUbicacionAsadas"
+)
+
+TIEMPO_CONEXION_API = 10
+TIEMPO_LECTURA_API = 60
+INTENTOS_DESCARGA_API = 3
+
+MENSAJE_DESCARGANDO_DATOS = "Descargando datos desde ARESEP..."
+MENSAJE_JSON_LOCAL_ACTUALIZADO = "JSON local actualizado correctamente."
+MENSAJE_ERROR_DESCARGA = "No se pudieron descargar los datos desde ARESEP."
+MENSAJE_REINTENTO_DESCARGA = "Reintentando descarga desde ARESEP..."
+MENSAJE_USANDO_JSON_LOCAL = "Se usará el JSON local como respaldo."

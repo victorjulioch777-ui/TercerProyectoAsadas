@@ -1,6 +1,10 @@
 import config
 
-from services.api_aresep import obtener_metadata, obtener_objetos_asadas
+from services.api_aresep import (
+    obtener_datos_aresep,
+    obtener_metadata,
+    obtener_objetos_asadas
+)
 from storage.archivo_asadas import guardar_asadas
 from storage.archivo_arbol import guardar_arbol, cargar_arbol
 from storage.archivo_geografico import guardar_estructura_geografica, cargar_estructura_geografica
@@ -19,14 +23,14 @@ def mostrar_fechas_metadata(fecha_actual, fecha_local):
     print("Fecha actual", fecha_actual)
     print("Fecha local", fecha_local)
 
-def reconstruir_estructuras():
+def reconstruir_estructuras(datos_aresep):
     """
     Se encarga de reconstruir las estructuras de datos.
     
     Returns:
         dict: Diccionario con la cantidad de ASADAS, el árbol y la estructura geográfica.
     """
-    lista_asadas = obtener_objetos_asadas()
+    lista_asadas = obtener_objetos_asadas(datos_aresep)
     print("Objetos ASADA cargados:", len(lista_asadas))
     
     posiciones = guardar_asadas(lista_asadas)
@@ -100,7 +104,8 @@ def sincronizar_datos(forzar = False):
     """
     print(config.MENSAJE_VERIFICANDO_ACTUALIZACION)
     
-    metadata_actual = obtener_metadata()
+    datos_aresep = obtener_datos_aresep()
+    metadata_actual = obtener_metadata(datos_aresep)
     fecha_actual = metadata_actual.get(config.CAMPO_FECHA_METADATA)
     fecha_local = obtener_fecha_metadata_local()
     
@@ -121,7 +126,7 @@ def sincronizar_datos(forzar = False):
 
     print(config.MENSAJE_RECONSTRUYENDO)
 
-    resultado = reconstruir_estructuras()
+    resultado = reconstruir_estructuras(datos_aresep)
 
     guardar_metadata(metadata_actual)
     print(config.MENSAJE_METADATA_GUARDADA)
