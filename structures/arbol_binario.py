@@ -1,32 +1,23 @@
+from collections import deque
+
 from models.nodo_arbol import nodo_arbol
 
 class arbol_binario_de_busqueda:
-    """
-    Se encarga de implementar un arbol binario de busqueda.
-    """
     def __init__(self):
         self.raiz = None
+        self.cantidad_nodos = 0
         
     def insertar(self, id_asada, posicion_registro):
-        """
-        Se encarga de insertar un nodo en el arbol binario de busqueda.
-        Args:
-            id_asada (_type_): Identificador de la asada.
-            posicion_registro (_type_): Posición del registro en el archivo.
-        """
         nuevo_nodo = nodo_arbol(id_asada, posicion_registro)
         
         if self.raiz is None:
             self.raiz = nuevo_nodo
-        else:
-            self._insertar_iterativo(nuevo_nodo)
+            self.cantidad_nodos += 1
+            return
+    
+        self._insertar_iterativo(nuevo_nodo)
 
     def _insertar_iterativo(self, nuevo_nodo):
-        """
-        Se encarga de insertar un nodo de forma iterativa.
-        Args:
-            nuevo_nodo (_type_): Nodo a insertar.
-        """
         nodo_actual = self.raiz
 
         while True:   
@@ -35,29 +26,81 @@ class arbol_binario_de_busqueda:
                 
                 if nodo_actual.izquierdo is None:
                     nodo_actual.izquierdo = nuevo_nodo
+                    self.cantidad_nodos += 1
                     return
+                
                 nodo_actual = nodo_actual.izquierdo
                 
             elif nuevo_nodo.id_asada > nodo_actual.id_asada:
                 if nodo_actual.derecho is None:
                     nodo_actual.derecho = nuevo_nodo
+                    self.cantidad_nodos += 1
                     return
+                
                 nodo_actual = nodo_actual.derecho
                 
             else:
                 nodo_actual.posicion_registro = nuevo_nodo.posicion_registro
                 return
+      
+    def construir_balanceado(self, pares_id_posicion):
+        pares_ordenados = sorted(pares_id_posicion, key=lambda par: par[0])
+        
+        self.raiz = None
+        self.cantidad_nodos = 0
+        
+        if not pares_ordenados:
+            return
+        
+        pila = [{
+            "inicio": 0,
+            "fin": len(pares_ordenados) - 1,
+            "padre": None,
+            "lado": None
+        }]
+        
+        while pila:
+            tarea = pila.pop()
+            inicio = tarea["inicio"]
+            fin = tarea["fin"]
+            
+            if inicio > fin:
+                continue
+            
+            mitad = (inicio + fin) // 2
+            id_asada, posicion_registro = pares_ordenados[mitad]
+            
+            nuevo_nodo = nodo_arbol(id_asada, posicion_registro)
+            
+            if ["tarea"] is None:
+                self.raiz = nuevo_nodo
+            elif tarea["lado"] == "izquierdo":
+                tarea["padre"].izquierdo = nuevo_nodo
+            else:
+                tarea["padre"].derecho = nuevo_nodo
                 
+            self.cantidad_nodos += 1
+            
+            pila.append({
+                "inicio": mitad + 1,
+                "fin": fin,
+                "padre": nuevo_nodo,
+                "lado": "derecho"
+            })
+            
+            pila.append({
+                "inicio": inicio,
+                "fin": mitad - 1,
+                "padre": nuevo_nodo,
+                "lado": "izquierdo"
+            })
+              
     def buscar(self, id_asada):
-        """
-        Se encarga de buscar la posiscion de una asada.   
-        Args:
-            id_asada (_type_): Identificador de la asada.
-
-        Returns:
-            _type_: Posición del registro en el archivo.
-        """
-        id_asada = int(id_asada)
+        try:
+            id_asada = int(id_asada)
+        except (TypeError, ValueError):
+            return None
+        
         nodo_actual = self.raiz
 
         while nodo_actual is not None:
@@ -91,3 +134,60 @@ class arbol_binario_de_busqueda:
             nodo_actual = nodo_actual.derecho
 
         return resultado
+
+    def altura(self):
+        if self.raiz is None:
+            return 0
+        
+        altura_maxima = 0
+        cola = deque([(self.raiz, 1)])
+        
+        while cola:
+            nodo_actual, altura_actual = cola.popleft()
+            altura_maxima = max(altura_maxima, altura_actual)
+            
+            if nodo_actual.izquierdo is not None:
+                cola.append((nodo_actual.izquierdo, altura_actual + 1))
+                
+            if nodo_actual.derecho is not None:
+                cola.append((nodo_actual.derecho, altura_actual + 1))
+                
+        return altura_maxima
+    
+    def estar_balanceado(self):
+        if self.raiz is None:
+            return True
+        
+        alturas = {}
+        pila = [(self.raiz, False)]
+        
+        while pila:
+            nodo_actual, visitado = pila.pop()
+            
+            if nodo_actual is None:
+                continue
+            
+            if visitado:
+                altura_izquierda = alturas.get(id(nodo_actual.izquierdo), 0)
+                altura_derecha = alturas.get(id(nodo_actual.derecho), 0)
+                
+                if abs(altura_izquierda - altura_derecha) > 1:
+                    return False
+                
+                alturas[id(nodo_actual)] = 1 + max(
+                    altura_izquierda,
+                    altura_derecha
+                )
+            else:
+                pila.append((nodo_actual, True))
+                pila.append((nodo_actual.derecho, False))
+                pila.append((nodo_actual.izquierdo, False))
+                
+        return True
+    
+    def obtener_estadisticas(self):
+        return {
+            "cantidad_nodos": self.cantidad_nodos,
+            "altura": self.altura(),
+            "balanceado": self.esta_balanceado()
+        }

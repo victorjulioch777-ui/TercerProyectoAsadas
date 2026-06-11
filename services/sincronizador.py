@@ -54,21 +54,20 @@ def reconstruir_estructuras(datos_aresep):
     }
 
 def construir_arbol(lista_asadas, posiciones):
-    """
-    Se encarga de construir el árbol binario de búsqueda.
-    
-    Args:
-        lista_asadas (list): Lista de objetos ASADA.
-        posiciones (dict): Diccionario de posiciones de las ASADAS.
-
-    Returns:
-        arbol_binario_de_busqueda: Árbol binario de búsqueda.
-    """
     arbol = arbol_binario_de_busqueda()
+    pares_id_posicion = []
     
     for asada in lista_asadas:
         posicion = posiciones[asada.id_asada]
-        arbol.insertar(asada.id_asada, posicion)
+        pares_id_posicion.append((asada.id_asada, posicion))
+        
+    arbol.construir_balanceado(pares_id_posicion)
+    
+    estadisticas = arbol.obtener_estadisticas()
+    
+    print("Árbol binario construido.")
+    print("Cantidad de nodos:", estadisticas["cantidad_nodos"])
+    print("Altura de árbol:", estadisticas["balanceado"])
         
     return arbol
 

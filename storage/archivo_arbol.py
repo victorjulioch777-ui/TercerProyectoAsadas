@@ -10,7 +10,7 @@ def guardar_arbol(arbol):
         arbol (_type_): El árbol binario de búsqueda a guardar.
     """
     with open(ruta_archivo_arbol, "wb")as archivo:
-        pickle.dump(arbol, archivo)
+        pickle.dump(arbol, archivo, protocol=pickle.HIGHEST_PROTOCOL)
         
 def cargar_arbol():
     """
