@@ -1,10 +1,19 @@
 from models.nodo_arbol import nodo_arbol
 
 class arbol_binario_de_busqueda:
+    """
+    Se encarga de implementar un arbol binario de busqueda.
+    """
     def __init__(self):
         self.raiz = None
         
     def insertar(self, id_asada, posicion_registro):
+        """
+        Se encarga de insertar un nodo en el arbol binario de busqueda.
+        Args:
+            id_asada (_type_): Identificador de la asada.
+            posicion_registro (_type_): Posición del registro en el archivo.
+        """
         nuevo_nodo = nodo_arbol(id_asada, posicion_registro)
         
         if self.raiz is None:
@@ -13,6 +22,11 @@ class arbol_binario_de_busqueda:
             self._insertar_iterativo(nuevo_nodo)
 
     def _insertar_iterativo(self, nuevo_nodo):
+        """
+        Se encarga de insertar un nodo de forma iterativa.
+        Args:
+            nuevo_nodo (_type_): Nodo a insertar.
+        """
         nodo_actual = self.raiz
 
         while True:   
@@ -35,6 +49,14 @@ class arbol_binario_de_busqueda:
                 return
                 
     def buscar(self, id_asada):
+        """
+        Se encarga de buscar la posiscion de una asada.   
+        Args:
+            id_asada (_type_): Identificador de la asada.
+
+        Returns:
+            _type_: Posición del registro en el archivo.
+        """
         id_asada = int(id_asada)
         nodo_actual = self.raiz
 
@@ -50,6 +72,11 @@ class arbol_binario_de_busqueda:
         return None
     
     def recorrido_inorden(self):
+        """
+        Se encarga de recorrer el arbol inorden.
+        Returns:
+            _type_: Lista de tuplas con el id_asada y la posicion_registro.
+        """
         resultado = []
         pila = []
         nodo_actual = self.raiz

@@ -4,6 +4,14 @@ import struct
 from config import ruta_archivo_asadas
 
 def guardar_asadas(lista_asadas):
+    """
+    Se encarga de guardar las asadas en el archivo binario.
+    Args:
+        lista_asadas (_type_): Lista de objetos de tipo Asada.
+
+    Returns:
+        _type_: Diccionario con las posiciones de cada asada.
+    """
     posiciones = {}
     
     with open(ruta_archivo_asadas, "wb")as archivo:
@@ -20,6 +28,14 @@ def guardar_asadas(lista_asadas):
     return posiciones
 
 def leer_asada_por_posicion(posicion):
+    """
+    Se encarga de leer una asada por su posición.
+    Args:
+        posicion (_type_): Posición de la asada.
+
+    Returns:
+        _type_: Datos de la asada.
+    """
     with open(ruta_archivo_asadas, "rb")as archivo:
         archivo.seek(posicion)
         

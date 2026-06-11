@@ -1,6 +1,9 @@
 import config
 
 class Asada:
+    """
+    Clase que representa una ASADA.
+    """
     def __init__(
         self,
         id_asada,
@@ -34,7 +37,13 @@ class Asada:
         
     @classmethod
     def from_dict(cls, data):
-        
+        """
+        Convierte un diccionario en un objeto Asada.
+        Args:
+            data (_type_): Diccionario con la informacion de la ASADA
+        Returns:
+            _type_: Objeto Asada
+        """
         claves = config.CLAVES_JSON_ASADA
         
         return cls(
@@ -54,7 +63,11 @@ class Asada:
         )
     
     def to_dict(self):
-    
+        """
+        Se encarga de convertir un objeto Asada en un diccionario.
+        Returns:
+            _type_: Diccionario con la informacion de la ASADA
+        """
         claves = config.CLAVES_ASADA
     
         return {
@@ -74,9 +87,17 @@ class Asada:
         }
 
     def to_dic(self):
+        """
+        Se encarga de llamar al metodo to_dict().
+        Returns:
+            _type_: Diccionario con la informacion de la ASADA
+        """
         return self.to_dict()
     
     def __str__(self):
+        """
+        Se encarga de representar un objeto Asada en formato string.
+        """
         return(
             f"{config.ETIQUETAS_ASADA[config.CAMPO_ID_ASADA]}: {self.id_asada}\n"
             f"{config.ETIQUETAS_ASADA[config.CAMPO_OPERADOR]}: {self.operador}\n"

@@ -1,7 +1,10 @@
+# Este archivo es el punto de entrada del sistema.
+# Se encarga de mostrar el menu principal y de llamar a las funciones correspondientes.
 from ui.menu_local import mostrar_menu_local
 from server.server import iniciar_servidor
 from client.cliente import iniciar_cliente
 
+# Funcion que se encarga de mostrar el menu principal.
 def main():
     while True:
         print("\n==== SISTEMA DISTRIBUIDO DE ASADAS ===")

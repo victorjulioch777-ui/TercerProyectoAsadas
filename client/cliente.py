@@ -9,6 +9,11 @@ from config import HOST, PORT
 from server.protocolo import enviar_mensaje, recibir_mensaje
 
 def iniciar_cliente():
+    """
+    Se encarga de iniciar el cliente y conectar con el servidor.
+    Si la conexion es exitosa, se muestra el menu de opciones.
+    Si la conexion falla, se muestra un mensaje de error.
+    """
     cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
     try:
@@ -20,6 +25,12 @@ def iniciar_cliente():
         cliente.close()
         
 def mostrar_menu_cliente(cliente):
+    """
+    Se encarga de mostrar el menu de opciones al cliente.
+    Y de manejar la interaccion con el servidor.
+    Args:
+        cliente (_type_): Socket del cliente
+    """
     while True:
         print("\n====CONSULTA DE CLIENTES====")
         print(f"{config.OPCIONES_CLIENTE['BUSCAR_ID']}. Buscar ASADA por id")
@@ -41,6 +52,12 @@ def mostrar_menu_cliente(cliente):
             print("Opción inválida.")
 
 def enviar_solicitud(cliente, accion, **datos):
+    """
+    Se encarga de enviar la solicitud al servidor y de recibir la respuesta.
+    Args:
+        cliente (_type_): Socket del cliente
+        accion (_type_): String que indica la accion a realizar
+    """
     solicitud = {
         "accion": accion,
         **datos
@@ -51,6 +68,11 @@ def enviar_solicitud(cliente, accion, **datos):
     mostrar_respuesta(respuesta)
        
 def buscar_por_id(cliente):
+    """
+    Se encarga de buscar una ASADA por id.
+    Args:
+        cliente (_type_): Socket del cliente
+    """
     id_asada = input("Digite el id_Asada: ").strip()
     
     if not id_asada.isdigit():
@@ -64,6 +86,11 @@ def buscar_por_id(cliente):
     )
 
 def buscar_por_ubicacion(cliente):
+    """
+    Se encarga de buscar las ASADAS por provincia, canton y distrito.
+    Args:
+        cliente (_type_): Socket del cliente
+    """
     provincia = input("Digite la provincia: ").strip().upper()
     canton = input("Digite el canton: ").strip().upper()
     distrito = input("Digite el distrito: ").strip().upper()
@@ -81,6 +108,11 @@ def buscar_por_ubicacion(cliente):
     )
     
 def mostrar_respuesta(respuesta):
+    """
+    Se encarga de mostrar la respuesta del servidor.
+    Args:
+        respuesta (_type_): Diccionario con la respuesta del servidor
+    """
     if respuesta is None:
         print("No se recibio respuestas del servidor.")
         return
@@ -98,6 +130,11 @@ def mostrar_respuesta(respuesta):
         mostrar_asada(datos)
         
 def mostrar_asada(asada):
+    """
+    Se encarga de mostrar una ASADA.
+    Args:
+        asada (_type_): Diccionario con la informacion de la ASADA
+    """
     print("-----------------------------------")
     print(f"{config.CLAVES_ASADAS['ID']}:", asada[config.CAMPO_ID_ASADA])
     print(f"{config.CLAVES_ASADAS['OPERADOR']}:", asada[config.CAMPO_OPERADOR])

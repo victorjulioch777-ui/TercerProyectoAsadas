@@ -3,6 +3,9 @@ from pathlib import Path
 from config import ruta_mapa
 
 def convertir_crtm05_a_wgs84(coordenadas_x, coordenadas_y):
+    """
+    Se encarga de convertir las coordenadas de CRTM05 a WGS84.
+    """
     from pyproj import Transformer
 
     x_crtm05 = float(str(coordenadas_x).strip())
@@ -19,6 +22,9 @@ def convertir_crtm05_a_wgs84(coordenadas_x, coordenadas_y):
     return latitud, longitud
 
 def generar_mapa_asada(asada):
+    """
+    Se encarga de generar un mapa interactivo con la ubicación de la ASADA.
+    """
     try:
         import folium
         import pyproj

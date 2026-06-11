@@ -4,6 +4,7 @@ base_dir = Path(__file__).resolve().parent
 
 data_dir = base_dir / "data"
 
+# Ubicacion de los archivos.
 ruta_json_asadas = data_dir / "asadas.json"
 ruta_archivo_asadas = data_dir / "asadas.dat"
 ruta_archivo_arbol = data_dir / "indice_arbol.dat"
@@ -16,6 +17,7 @@ data_dir.mkdir(exist_ok = True)
 HOST = "127.0.0.1"
 PORT = 5000
 
+# Claves para el archivo JSON.
 CLAVES_ASADAS = {
     "ID": "ID",
     "OPERADOR": "Operador",
@@ -27,12 +29,14 @@ CLAVES_ASADAS = {
     "TIPO_DE_SISTEMA": "Tipo de sistema"
 }
 
+# Opciones del cliente.
 OPCIONES_CLIENTE = {
     "BUSCAR_ID": "1",
     "BUSCAR_UBICACION": "2",
     "SALIR": "3"
 }
 
+# Claves para el archivo JSON.
 CLAVES_JSON_ASADA = {
     "ID_ASADA": "id_Asada",
     "ID_OBJETO": "id_Objecto",
@@ -49,6 +53,7 @@ CLAVES_JSON_ASADA = {
     "COORDENADA_Y": "coordenadaY"
 }
 
+# Claves para el archivo de datos.
 CLAVES_ASADA = {
     "ID_ASADA": "id_asada",
     "ID_OBJETO": "id_objeto",
@@ -65,40 +70,48 @@ CLAVES_ASADA = {
     "COORDENADA_Y": "coordenadas_y"
 }
 
+# Claves de los campos del JSON de respuesta.
 CAMPO_ACCION = "accion"
 CAMPO_ESTADO = "estado"
 CAMPO_MENSAJE = "mensaje"
 CAMPO_DATOS = "datos"
 
+# Estados de la respuesta.
 ESTADO_OK = "ok"
 ESTADO_ERROR = "error"
 
+# Acciones del cliente.
 ACCION_BUSCAR_ID = "buscar_id"
 ACCION_BUSCAR_UBICACION = "buscar_ubicacion"
 ACCION_SALIR = "salir"
 
+# Campos del JSON de respuesta.
 CAMPO_ID_ASADA = "id_asada"
 CAMPO_PROVINCIA = "provincia"
 CAMPO_CANTON = "canton"
 CAMPO_DISTRITO = "distrito"
 CAMPO_POSICION_REGISTRO = "posicion_registro"
 
+# Mensajes del servidor.
 MENSAJE_CONEXION_CERRADA = "Conexión cerrada."
 MENSAJE_ACCION_INVALIDA = "Acción no válida."
 MENSAJE_ASADA_NO_ENCONTRADA = "No se encontró una ASADA con ese id."
 MENSAJE_UBICACION_SIN_ASADAS = "No se encontraron ASADAS para esa ubicación."  
 
+# Atributos del JSON de respuesta.
 ATR_PROVINCIAS = "provincias"
 ATR_CANTONES = "cantones"
 ATR_DISTRITOS = "distritos"
 ATR_ASADAS = "asadas"
 
+# Atributos del JSON de respuesta.
 CAMPO_OPERADOR = "operador"
 CAMPO_TELEFONO = "telefono"
 CAMPO_CORREO = "correo"
 CAMPO_TIPO_DE_SISTEMA = "tipo_sistema"
 CAMPO_POSICION_REGISTRO = "posicion_registro"
 
+# Etiquetas de las asadas.
 ETIQUETAS_ASADA = {
     CAMPO_ID_ASADA: "ID",
     CAMPO_OPERADOR: "Operador",
@@ -110,13 +123,14 @@ ETIQUETAS_ASADA = {
     CAMPO_TIPO_DE_SISTEMA: "Tipo de sistema"
 }
 
+# Opciones del cliente.
 OPCION_SINCRONIZAR = "1"
 OPCION_BUSCAR_ID = "2"
 OPCION_BUSCAR_UBICACION = "3"
 OPCION_GENERAR_MAPA = "4"
 OPCION_SALIR = "5"
 
-
+# Mensajes del cliente.
 MENSAJE_SIN_DATOS = "Primero debe sincronizar los datos."
 MENSAJE_ID_INVALIDO = "El id_Asada debe ser un número."
 MENSAJE_CANTONES_NO_ENCONTRADOS = "No se encontraron cantones para esa provincia."
@@ -125,6 +139,7 @@ MENSAJE_ASADAS_NO_ENCONTRADAS_DISTRITO = "No se encontraron asadas para ese dist
 MENSAJE_SALIENDO = "Saliendo del sistema..."
 MENSAJE_OPCION_INVALIDA = "Opción invalida."
 
+# Prompts del cliente.
 PROMPT_OPCION = "Seleccione una opción: "
 PROMPT_ID_ASADA = "Digite el id_Asada: "
 PROMPT_ID_ASADA_MAPA = "Digite el id_Asada para generar el mapa: "
@@ -132,9 +147,11 @@ PROMPT_PROVINCIA = "Digite la provincia: "
 PROMPT_CANTON = "Digite el cantón: "
 PROMPT_DISTRITO = "Digite el distrito: "
 
+# Claves para la metadata.
 CAMPO_METADATA = "metadata"
 CAMPO_FECHA_METADATA = "date"
 
+# Mensajes de la metadata.
 MENSAJE_VERIFICANDO_ACTUALIZACION = "Verificando actualización de datos..."
 MENSAJE_DATOS_ACTUALIZADOS = "Los datos ya estan actualizados. No se reconstruyeron los archivos."
 MENSAJE_METADATA_NO_EXISTE = "No existe metadata local. Se reconstruirán los archivos."

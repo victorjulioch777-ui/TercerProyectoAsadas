@@ -15,6 +15,11 @@ Estructuras = Tuple[arbol_binario_de_busqueda, lista_geografica]
 
 
 def cargar_estructuras_seguro() -> Optional[Estructuras]:
+    """ 
+    Se encarga de cargar las estructuras de forma segura.
+    Returns:
+        Optional[Estructuras]: Arbol y lista geográfica si se cargan correctamente, None si no.
+    """
     try:
         arbol, estructura = cargar_estructuras()
         return arbol, estructura
@@ -25,6 +30,13 @@ def cargar_estructuras_seguro() -> Optional[Estructuras]:
 
 
 def pedir_id_asada(mensaje: str = config.PROMPT_ID_ASADA) -> Optional[str]:
+    """
+    Se encarga de pedir el id de una asada.
+    Args:
+        mensaje (str, optional): Mensaje que se muestra al usuario. Defaults to config.PROMPT_ID_ASADA.
+    Returns:
+        Optional[str]: Id de la asada.
+    """
     id_asada = input(mensaje).strip()
 
     if not id_asada.isdigit():
@@ -33,7 +45,7 @@ def pedir_id_asada(mensaje: str = config.PROMPT_ID_ASADA) -> Optional[str]:
 
     return id_asada
 
-
+# Función que se encarga de buscar una asada en el árbol.
 def buscar_asada_en_arbol(
     arbol: arbol_binario_de_busqueda,
     id_asada: str
@@ -49,6 +61,11 @@ def buscar_asada_en_arbol(
 
 
 def mostrar_asada(asada: AsadaDict) -> None:
+    """
+    Se encarga de mostrar la informacion de una asada.
+    Args:
+        asada (AsadaDict): Asada a mostrar.
+    """
     print("-----------------------------------")
 
     for campo, etiqueta in config.ETIQUETAS_ASADA.items():
@@ -56,12 +73,18 @@ def mostrar_asada(asada: AsadaDict) -> None:
 
 
 def mostrar_lista(titulo: str, elementos: list[str]) -> None:
+    """
+    Se encarga de mostrar una lista de elementos.
+    Args:
+        titulo (str): Titulo de la lista.
+        elementos (list[str]): Elementos de la lista.
+    """
     print(f"\n{titulo}")
 
     for elemento in elementos:
         print("-", elemento)
 
-
+# Se encarga de obtener las referencias de las asadas por ubicacion.
 def obtener_referencias_por_ubicacion(
     estructura: lista_geografica,
     provincia: str,
@@ -75,7 +98,7 @@ def obtener_referencias_por_ubicacion(
         distrito
     )
 
-
+# Se encarga de mostrar las asadas desde las referencias.
 def mostrar_asadas_desde_referencias(
     referencias: list[ReferenciaAsada]
 ) -> None:
@@ -85,9 +108,8 @@ def mostrar_asadas_desde_referencias(
         asada = leer_asada_por_posicion(posicion)
         mostrar_asada(asada)
 
-
+# Función que se encarga de buscar una asada por id.
 def buscar_id() -> None:
-    
     estructuras = cargar_estructuras_seguro()
 
     if estructuras is None:
@@ -110,7 +132,9 @@ def buscar_id() -> None:
 
 
 def buscar_por_ubicacion() -> None:
-    
+    """
+    Se encarga de buscar una asada por ubicacion.
+    """
     estructuras = cargar_estructuras_seguro()
 
     if estructuras is None:
@@ -159,6 +183,9 @@ def buscar_por_ubicacion() -> None:
 
 
 def generar_mapa_por_id() -> None:
+    """
+    Se encarga de generar el mapa de una asada.
+    """
     estructuras = cargar_estructuras_seguro()
 
     if estructuras is None:
@@ -211,6 +238,9 @@ def procesar_opcion_menu(opcion: str) -> bool:
 
 
 def mostrar_menu_local() -> None:
+    """
+    Se encarga de mostrar el menu local.
+    """
     continuar = True
 
     while continuar:

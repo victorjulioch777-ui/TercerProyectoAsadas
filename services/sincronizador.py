@@ -9,10 +9,23 @@ from structures.arbol_binario import arbol_binario_de_busqueda
 from structures.listas_geograficas import lista_geografica
 
 def mostrar_fechas_metadata(fecha_actual, fecha_local):
+    """
+    Se encarga de mostrar las fechas de metadata.
+    
+    Args:
+        fecha_actual (str): Fecha actual obtenida de la API.
+        fecha_local (str): Fecha local obtenida del archivo de metadata.
+    """
     print("Fecha actual", fecha_actual)
     print("Fecha local", fecha_local)
 
 def reconstruir_estructuras():
+    """
+    Se encarga de reconstruir las estructuras de datos.
+    
+    Returns:
+        dict: Diccionario con la cantidad de ASADAS, el árbol y la estructura geográfica.
+    """
     lista_asadas = obtener_objetos_asadas()
     print("Objetos ASADA cargados:", len(lista_asadas))
     
@@ -37,6 +50,16 @@ def reconstruir_estructuras():
     }
 
 def construir_arbol(lista_asadas, posiciones):
+    """
+    Se encarga de construir el árbol binario de búsqueda.
+    
+    Args:
+        lista_asadas (list): Lista de objetos ASADA.
+        posiciones (dict): Diccionario de posiciones de las ASADAS.
+
+    Returns:
+        arbol_binario_de_busqueda: Árbol binario de búsqueda.
+    """
     arbol = arbol_binario_de_busqueda()
     
     for asada in lista_asadas:
@@ -46,6 +69,16 @@ def construir_arbol(lista_asadas, posiciones):
     return arbol
 
 def construir_estructura_geografica(lista_asadas, posiciones):
+    """
+    Se encarga de construir la estructura geográfica.
+    
+    Args:
+        lista_asadas (list): Lista de objetos ASADA.
+        posiciones (dict): Diccionario de posiciones de las ASADAS.
+
+    Returns:
+        lista_geografica: Estructura geográfica.
+    """
     estructura = lista_geografica()
     
     for asada in lista_asadas:
@@ -55,6 +88,16 @@ def construir_estructura_geografica(lista_asadas, posiciones):
     return estructura
 
 def sincronizar_datos(forzar = False):
+    """
+    Se encarga de sincronizar los datos con la API.
+    
+    Args:
+        forzar (bool, optional): Si es True, se sincronizan los datos sin verificar la fecha.
+            Defaults to False.
+
+    Returns:
+        dict: Diccionario con la información de la sincronización.    
+    """
     print(config.MENSAJE_VERIFICANDO_ACTUALIZACION)
     
     metadata_actual = obtener_metadata()
@@ -92,6 +135,11 @@ def sincronizar_datos(forzar = False):
     }
     
 def cargar_estructuras():
+    """
+    Se encarga de cargar las estructuras desde los archivos.
+    Returns:
+        _type_: Tupla con el árbol y la estructura geográfica.
+    """
     arbol = cargar_arbol()
     estructura_geografica = cargar_estructura_geografica()
     
