@@ -104,14 +104,28 @@ def sincronizar_datos(forzar = False):
     """
     print(config.MENSAJE_VERIFICANDO_ACTUALIZACION)
     
-    datos_aresep = obtener_datos_aresep()
+    resultado_descarga = obtener_datos_aresep()
+    datos_aresep = resultado_descarga["datos"]
+    origen_datos = resultado_descarga["origen"]
+
     metadata_actual = obtener_metadata(datos_aresep)
     fecha_actual = metadata_actual.get(config.CAMPO_FECHA_METADATA)
     fecha_local = obtener_fecha_metadata_local()
     
     mostrar_fechas_metadata(fecha_actual, fecha_local)
+
+    if origen_datos == "local" and fecha_local is not None and not forzar:
+        print(config.MENSAJE_ACTUALIZACION_NO_VERIFICADA)
+        return {
+            "actualizado": False,
+            "fecha": fecha_actual,
+            "origen": origen_datos
+        }
+
+    if forzar:
+        print(config.MENSAJE_SINCRONIZACION_FORZADA)
     
-    if fecha_local is None:
+    elif fecha_local is None:
         print(config.MENSAJE_METADATA_NO_EXISTE)
     
     elif not forzar and fecha_local == fecha_actual:
@@ -149,3 +163,23 @@ def cargar_estructuras():
     estructura_geografica = cargar_estructura_geografica()
     
     return arbol, estructura_geografica
+
+def debo_reconstruir(forzar, fecha_actual, fecha_local, origen_datos):
+    if forzar:
+        print(config.MENSAJE_SINCRONIZACION_FORZADA)
+        return True
+    
+    if origen_datos == "local":
+        print(config.MENSAJE_ACTUALIZACION_NO_VERIFICADA)
+        return False
+    
+    if fecha_actual is None:
+        print(config.MENSAJE_METADATA_NO_EXISTE)
+        return True
+    
+    if fecha_local != fecha_actual:
+        print(config.MENSAJE_METADATA_CAMBIO)
+        return True
+    
+    print(config.MENSAJE_DATOS_ACTUALIZADOS)
+    return False

@@ -153,7 +153,7 @@ CAMPO_FECHA_METADATA = "date"
 
 # Mensajes de la metadata.
 MENSAJE_VERIFICANDO_ACTUALIZACION = "Verificando actualización de datos..."
-MENSAJE_DATOS_ACTUALIZADOS = "Los datos ya estan actualizados. No se reconstruyeron los archivos."
+MENSAJE_DATOS_ACTUALIZADOS = "Los datos ya están actualizados. No se reconstruyeron los archivos."
 MENSAJE_METADATA_NO_EXISTE = "No existe metadata local. Se reconstruirán los archivos."
 MENSAJE_METADATA_CAMBIO = "Se detectó una actualización en la metadata."
 MENSAJE_RECONSTRUYENDO = "Reconstruyendo archivos y estructuras..."
@@ -164,12 +164,13 @@ URL_ARESEP_ASADAS = (
     "ObtenerInformacionUbicacionAsadas"
 )
 
-TIEMPO_CONEXION_API = 10
-TIEMPO_LECTURA_API = 60
-INTENTOS_DESCARGA_API = 3
+TIEMPO_ESPERA_API = 1
 
 MENSAJE_DESCARGANDO_DATOS = "Descargando datos desde ARESEP..."
 MENSAJE_JSON_LOCAL_ACTUALIZADO = "JSON local actualizado correctamente."
 MENSAJE_ERROR_DESCARGA = "No se pudieron descargar los datos desde ARESEP."
-MENSAJE_REINTENTO_DESCARGA = "Reintentando descarga desde ARESEP..."
 MENSAJE_USANDO_JSON_LOCAL = "Se usará el JSON local como respaldo."
+MENSAJE_JSON_LOCAL_NO_DISPONIBLES = "No hay JSON local disponible como respaldo."
+MENSAJE_JSON_LOCAL_INVALIDO = "El JSON local no tiene una estructura válida."
+MENSAJE_ACTUALIZACION_NO_VERIFICADA = "No se pudo verificar la actualización remota; se trabajará con datos locales."
+MENSAJE_SINCRONIZACION_FORZADA = "Se forzó la sincronización de datos."

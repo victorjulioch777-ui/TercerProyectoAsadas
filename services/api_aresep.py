@@ -3,49 +3,36 @@ import config
 import requests
 from models.asada import Asada
 
+class error_datos_aresep(Exception):
+    pass
+
 def validar_datos_aresep(datos):
     if not isinstance(datos, dict):
-        raise ValueError("La respuesta de ARESEP no tiene formato de diccionario.")
+        raise error_datos_aresep("La respuesta de ARESEP no tiene formato de diccionario.")
     
     if "metadata" not in datos:
-        raise ValueError("La respuesta de ARESEP no contiene metadata.")
+        raise error_datos_aresep("La respuesta de ARESEP no contiene metadata.")
     
     if "value" not in datos:
-        raise ValueError("La respuesta de ARESEP no contiene la lista de ASADAS.")
+        raise error_datos_aresep("La respuesta de ARESEP no contiene la lista de ASADAS.")
     
     if not isinstance(datos["value"], list):
-        raise ValueError("El campo value de ARESEP no es una lista.")
+        raise error_datos_aresep("El campo value de ARESEP no es una lista.")
 
 def descargar_datos_aresep():
     print(config.MENSAJE_DESCARGANDO_DATOS)
 
-    ultimo_error = None
+    respuesta = requests.get(
+        config.URL_ARESEP_ASADAS,
+        timeout = config.TIEMPO_ESPERA_API
+    )
 
-    for intento in range(1, config.INTENTOS_DESCARGA_API + 1):
-        try:
-            respuesta = requests.get(
-                config.URL_ARESEP_ASADAS,
-                timeout=(
-                    config.TIEMPO_CONEXION_API,
-                    config.TIEMPO_LECTURA_API
-                )
-            )
-
-            respuesta.raise_for_status()
-
-            datos = respuesta.json()
-            validar_datos_aresep(datos)
-
-            return datos
-        except requests.RequestException as error:
-            ultimo_error = error
-            print(f"{config.MENSAJE_ERROR_DESCARGA} Intento {intento}/{config.INTENTOS_DESCARGA_API}.")
-
-            if intento < config.INTENTOS_DESCARGA_API:
-                print(config.MENSAJE_REINTENTO_DESCARGA)
-
-    raise ultimo_error
-
+    respuesta.raise_for_status()
+    
+    datos = respuesta.json()
+    validar_datos_aresep(datos)
+    
+    return datos
 
 def guardar_json_local(datos):
     with open(config.ruta_json_asadas, "w", encoding="utf-8") as archivo:
@@ -57,16 +44,43 @@ def cargar_json_local():
     with open(config.ruta_json_asadas, "r", encoding="utf-8")as archivo:
         return json.load(archivo)
 
+def cargar_json_local_seguro():
+    try:
+        datos = cargar_json_local()
+        validar_datos_aresep(datos)
+        return datos
+    except FileNotFoundError:
+        print(config.MENSAJE_JSON_LOCAL_NO_DISPONIBLES)
+        raise
+    
+    except json.JSONDecodeError:
+        print(config.MENSAJE_JSON_LOCAL_INVALIDO)
+        raise
+    
+    except error_datos_aresep:
+        print(config.MENSAJE_JSON_LOCAL_INVALIDO)
+        raise
+
 def obtener_datos_aresep():
     try:
         datos = descargar_datos_aresep()
         guardar_json_local(datos)
-        return datos
-    except requests.RequestException:
+        
+        return {
+            "datos": datos,
+            "origen": "remoto"
+        }
+        
+    except (requests.RequestException, error_datos_aresep):
+        print(config.MENSAJE_ERROR_DESCARGA)
         print(config.MENSAJE_USANDO_JSON_LOCAL)
-        datos = cargar_json_local()
-        validar_datos_aresep(datos)
-        return datos
+        
+        datos = cargar_json_local_seguro()
+        
+        return {
+            "datos": datos,
+            "origen": "local"
+        }
     
 def obtener_lista_asadas(datos=None):
     if datos is None:
@@ -81,19 +95,33 @@ def obtener_metadata(datos=None):
     return datos["metadata"]
 
 def obtener_objetos_asadas(datos=None):
-    """
-    Se encarga de crear los objetos asadas.
-    Returns:
-        _type_: Retorna los objetos asadas.
-    """
     registros = obtener_lista_asadas(datos)
     asadas = []
+    errores = []
     
-    for registro in registros:
+    for indice, registro in enumerate(registros):
         try:
             asada = Asada.from_dict(registro)
             asadas.append(asada)
-        except Exception as error:
-            print("Error convirtiendo registro:", error)
+            
+        except (ValueError, TypeError, KeyError) as error:
+            id_asada = registro.get("id_asada", "SIN_ID")
+            
+            errores.append({
+                "indice": indice,
+                "id_asada": id_asada,
+                "error": str(error)                
+            })
+            
+            print(
+                f"Error conviertiendo registro {indice}"
+                f"(id_Asada={id_asada}): {error}"
+            )
+            
+    if not asadas:
+        raise error_datos_aresep("No se pudo convertir ninguna ASADA.")
     
+    if errores:
+        print(f"Registros con error al convertir: {len(errores)}")
+        
     return asadas
