@@ -7,13 +7,13 @@ Un sistema completo y distribuido para la gestión y visualización de informaci
 Este proyecto integra múltiples módulos para:
 - **Descargar datos** de ASADAS desde servicios web externos
 - **Procesar y almacenar** información geográfica y estructural
-- **Visualizar datos** en mapas interactivos
+- **Visualizar datos** en mapas interactivos (por ID o completos)
 - **Operar en modo local o distribuido** (cliente-servidor)
 
 ## 🎯 Características
 
 ✅ Descarga automática de datos en formato JSON desde servicios web públicos  
-✅ Generación de mapas interactivos en HTML  
+✅ Generación de mapas interactivos en HTML (por ID de ASADA o completos)  
 ✅ Almacenamiento eficiente de datos con estructuras personalizadas  
 ✅ Sistema cliente-servidor para consultas distribuidas  
 ✅ Interfaz de menú interactiva  
@@ -27,7 +27,7 @@ TercerProyectoAsadas/
 ├── config.py                    # Configuración centralizada
 ├── requirements.txt             # Dependencias del proyecto
 ├── descarga_del_json.py        # Script para descargar datos
-├── genera_mapa_html.py         # Generación de mapas interactivos
+├── genera_mapa_html.py         # Generación de mapas interactivos (por ID)
 ├── data/                        # Almacenamiento de datos
 │   ├── asadas.json             # Datos en formato JSON
 │   ├── asadas.dat              # Datos procesados
@@ -98,7 +98,7 @@ Esto descargará los datos más recientes desde el servicio web de datos abierto
 ```bash
 python genera_mapa_html.py
 ```
-Genera un archivo `mapa.html` con la visualización interactiva de todas las ASADAS.
+Genera un archivo `mapa.html` con la visualización interactiva de una ASADA específica por ID. El flujo principal del sistema utiliza esta funcionalidad para generar mapas según la consulta del usuario.
 
 ## ⚙️ Configuración
 
@@ -121,7 +121,7 @@ Los datos se obtienen del servicio web público de ARESEP:
 ## 🗺️ Visualización
 
 El proyecto genera mapas interactivos usando **Folium**, permitiendo visualizar:
-- Ubicación de todas las ASADAS
+- Ubicación de ASADAS específicas por ID
 - Información contextual de cada ASADA
 - Capas geográficas
 
