@@ -8,8 +8,10 @@ def guardar_estructura_geografica(estructura_geografica):
     Args:
         estructura_geografica (_type_): Diccionario con la estructura geografica.
     """
+    ruta_archivo_geografico.parent.mkdir(parents=True, exist_ok=True)
+    
     with open(ruta_archivo_geografico, "wb")as archivo:
-        pickle.dump(estructura_geografica, archivo)
+        pickle.dump(estructura_geografica, archivo, protocol=pickle.HIGHEST_PROTOCOL)
         
 def cargar_estructura_geografica():
     """

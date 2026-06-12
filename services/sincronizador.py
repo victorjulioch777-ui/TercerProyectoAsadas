@@ -71,23 +71,23 @@ def construir_arbol(lista_asadas, posiciones):
         
     return arbol
 
-def construir_estructura_geografica(lista_asadas, posiciones):
-    """
-    Se encarga de construir la estructura geográfica.
-    
-    Args:
-        lista_asadas (list): Lista de objetos ASADA.
-        posiciones (dict): Diccionario de posiciones de las ASADAS.
-
-    Returns:
-        lista_geografica: Estructura geográfica.
-    """
+def construir_estructura_geografica(lista_asadas, posiciones):   
     estructura = lista_geografica()
     
     for asada in lista_asadas:
         posicion = posiciones[asada.id_asada]
         estructura.insertar_asada(asada, posicion)
-        
+    
+    estadisticas = estructura.obtener_estadisticas()
+
+    print("Estructura geográfica jerárquica construida.")
+    print("Cantidad de provincias:", estadisticas["cantidad_provincias"])
+    print("Cantidad de cantones:", estadisticas["cantidad_cantones"])
+    print("Cantidad de distritos:", estadisticas["cantidad_distritos"])
+    print("Cantidad de ASADAS ubicadas:", estadisticas["cantidad_asadas"])
+    print("Distrito con más ASADAS:", estadisticas["distrito_con_mas_asadas"])
+    print("ASADAS en ese distrito:", estadisticas["mayor_cantidad_asadas"])
+    
     return estructura
 
 def sincronizar_datos(forzar = False):
