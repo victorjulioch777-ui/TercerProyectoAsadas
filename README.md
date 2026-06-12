@@ -75,6 +75,7 @@ pip install -r requirements.txt
 ### Ejecución del programa principal
 ```bash
 python main.py
+python3 main.py
 ```
 
 ### Menú interactivo
