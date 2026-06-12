@@ -72,7 +72,7 @@ class arbol_binario_de_busqueda:
             
             nuevo_nodo = nodo_arbol(id_asada, posicion_registro)
             
-            if ["tarea"] is None:
+            if tarea["padre"] is None:
                 self.raiz = nuevo_nodo
             elif tarea["lado"] == "izquierdo":
                 tarea["padre"].izquierdo = nuevo_nodo
@@ -189,5 +189,5 @@ class arbol_binario_de_busqueda:
         return {
             "cantidad_nodos": self.cantidad_nodos,
             "altura": self.altura(),
-            "balanceado": self.esta_balanceado()
+            "balanceado": self.estar_balanceado()
         }

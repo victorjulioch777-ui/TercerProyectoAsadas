@@ -164,7 +164,7 @@ URL_ARESEP_ASADAS = (
     "ObtenerInformacionUbicacionAsadas"
 )
 
-TIEMPO_ESPERA_API = 1
+TIEMPO_ESPERA_API = (0.3, 0.3)
 
 MENSAJE_DESCARGANDO_DATOS = "Descargando datos desde ARESEP..."
 MENSAJE_JSON_LOCAL_ACTUALIZADO = "JSON local actualizado correctamente."

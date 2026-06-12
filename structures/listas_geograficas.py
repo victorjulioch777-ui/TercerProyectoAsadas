@@ -22,12 +22,12 @@ class lista_geografica:
         canton = self._buscar_canton(provincia, asada.canton)
          
         if canton is None:
-            canton = self._crear_canton(asada.canton)
+            canton = self._crear_canton(provincia, asada.canton)
         
         distrito = self._buscar_distrito(canton, asada.distrito)
          
         if distrito is None:
-            distrito = self._crear_distrito(asada.distrito)
+            distrito = self._crear_distrito(canton, asada.distrito)
             
         self._insertar_asada_ordenada(
             distrito,
@@ -102,9 +102,9 @@ class lista_geografica:
         return self._obtener_referencias_asadas(distrito.asadas)
         
     def obtener_estadisticas(self):
-        cantidad_provincia = 0
+        cantidad_provincias = 0
         cantidad_cantones = 0
-        cantidad_distrito = 0
+        cantidad_distritos = 0
         cantidad_asadas = 0
         mayor_cantidad_asadas = -1
         distrito_con_mas_asadas = None
@@ -142,12 +142,12 @@ class lista_geografica:
     
     def _crear_canton(self, provincia, nombre):
         canton = nodo_canton(self._normalizar_nombre(nombre))
-        self.cantones = self._insertar_nodo_ordenado(provincia.cantones. canton)        
+        provincia.cantones = self._insertar_nodo_ordenado(provincia.cantones, canton)
         return canton 
     
     def _crear_distrito(self, canton, nombre):
         distrito = nodo_distrito(self._normalizar_nombre(nombre))
-        self.distritos = self._insertar_nodo_ordenado(canton.distritos, distrito)
+        canton.distritos = self._insertar_nodo_ordenado(canton.distritos, distrito)
         return distrito   
      
     def _buscar_provincia(self, nombre):

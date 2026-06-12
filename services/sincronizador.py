@@ -202,10 +202,52 @@ def construir_estructura_geografica(lista_asadas, posiciones):
     
     return estructura
 
+def estructuras_actualizadas_con_json_local():
+    if not existen_archivos_estructuras():
+        return False
+
+    if not config.ruta_json_asadas.exists():
+        return True
+
+    fecha_json = config.ruta_json_asadas.stat().st_mtime
+    estructuras = [
+        config.ruta_archivo_asadas,
+        config.ruta_archivo_arbol,
+        config.ruta_archivo_geografico
+    ]
+
+    return all(ruta.stat().st_mtime >= fecha_json for ruta in estructuras)
+
+
+def sincronizar_desde_cache_local():
+    if not estructuras_actualizadas_con_json_local():
+        return None
+
+    fecha_local = obtener_fecha_metadata_local()
+
+    if fecha_local is None:
+        return None
+
+    print("Sincronización rápida: se usará la estructura local actual.")
+    print(config.MENSAJE_DATOS_ACTUALIZADOS)
+
+    return {
+        "actualizado": False,
+        "fecha": fecha_local,
+        "origen": "local_cache"
+    }
+
+
 def sincronizar_datos(forzar = False):
     print(config.MENSAJE_VERIFICANDO_ACTUALIZACION)
     
     datos_anteriores = obtener_datos_locales_previos()
+
+    if not forzar:
+        resultado_cache = sincronizar_desde_cache_local()
+
+        if resultado_cache is not None:
+            return resultado_cache
     
     resultado_descarga = obtener_datos_aresep()
     datos_aresep = resultado_descarga["datos"]
