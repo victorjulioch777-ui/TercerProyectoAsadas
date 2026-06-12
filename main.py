@@ -4,8 +4,10 @@ from ui.menu_local import mostrar_menu_local
 from server.server import iniciar_servidor
 from client.cliente import iniciar_cliente
 
-# Funcion que se encarga de mostrar el menu principal.
 def main():
+    """
+    Se encarga de mostrar el menu principal y de llamar a las funciones correspondientes.
+    """
     while True:
         print("\n==== SISTEMA DISTRIBUIDO DE ASADAS ===")
         print("1. Sistema local")

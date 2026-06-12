@@ -14,6 +14,13 @@ class lista_geografica:
         self.provincias = None
         
     def insertar_asada(self, asada, posicion_registro):
+        """
+        Se encarga de insertar una ASADA en la estructura geográfica.
+        
+        Args:
+            asada (nodo_asada): Nodo ASADA.
+            posicion_registro (int): Posicion del registro en el archivo binario.
+        """
         provincia = self._buscar_provincia(asada.provincia)
 
         if provincia is None:
@@ -84,6 +91,17 @@ class lista_geografica:
         return self._obtener_nombres_desde_lista(canton.distritos)
     
     def obtener_asadas_por_distrito(self, nombre_provincia, nombre_canton, nombre_distrito):
+        """
+        Se encarga de obtener todas las ASADAS de un distrito.
+        
+        Args:
+            nombre_provincia (_type_): Nombre de la provincia.
+            nombre_canton (_type_): Nombre del cantón.
+            nombre_distrito (_type_): Nombre del distrito.
+
+        Returns:
+            list: Lista con las referencias de las ASADAS.
+        """
         provincia = self._buscar_provincia(nombre_provincia)
         
         if provincia is None:
@@ -102,6 +120,12 @@ class lista_geografica:
         return self._obtener_referencias_asadas(distrito.asadas)
         
     def obtener_estadisticas(self):
+        """
+        Se encarga de obtener las estadisticas de la estructura geografica.
+        
+        Returns:
+            dict: Diccionario con las estadisticas de la estructura geografica.
+        """
         cantidad_provincias = 0
         cantidad_cantones = 0
         cantidad_distritos = 0
@@ -136,16 +160,45 @@ class lista_geografica:
         }
                         
     def _crear_provincia(self, nombre):
+        """
+        Se encarga de crear una provincia.
+        
+        Args:
+            nombre (_type_): Nombre de la provincia.
+            
+        Returns:
+            nodo_provincia: Nodo de la provincia.
+        """
         provincia = nodo_provincia(self._normalizar_nombre(nombre))
         self.provincias = self._insertar_nodo_ordenado(self.provincias, provincia)
         return provincia
     
     def _crear_canton(self, provincia, nombre):
+        """
+        Se encarga de crear un cantón.
+        
+        Args:
+            provincia (_type_): Provincia donde se creará el cantón.
+            nombre (_type_): Nombre del cantón.
+            
+        Returns:
+            nodo_canton: Nodo del cantón.
+        """
         canton = nodo_canton(self._normalizar_nombre(nombre))
         provincia.cantones = self._insertar_nodo_ordenado(provincia.cantones, canton)
         return canton 
     
     def _crear_distrito(self, canton, nombre):
+        """
+        Se encarga de crear un distrito.
+        
+        Args:
+            canton (_type_): Cantón donde se creará el distrito.
+            nombre (_type_): Nombre del distrito.
+            
+        Returns:
+            nodo_distrito: Nodo del distrito.
+        """
         distrito = nodo_distrito(self._normalizar_nombre(nombre))
         canton.distritos = self._insertar_nodo_ordenado(canton.distritos, distrito)
         return distrito   
@@ -188,6 +241,16 @@ class lista_geografica:
         return self._buscar_nodo_por_nombre(canton.distritos, nombre)
     
     def _buscar_nodo_por_nombre(self, cabeza, nombre):
+        """
+        Se encarga de buscar un nodo por nombre.
+        
+        Args:
+            cabeza (_type_): Cabeza de la lista.
+            nombre (_type_): Nombre del nodo a buscar.
+            
+        Returns:
+            _type_: Nodo buscado.
+        """
         clave_buscada = self._clave_busqueda(nombre)
         
         for nodo in self._recorrer_lista(cabeza):
@@ -197,6 +260,16 @@ class lista_geografica:
         return None
     
     def _insertar_nodo_ordenado(self, cabeza, nuevo_nodo):
+        """
+        Se encarga de insertar un nodo ordenado en la lista.
+        
+        Args:
+            cabeza (_type_): Cabeza de la lista.
+            nuevo_nodo (_type_): Nodo a insertar.
+            
+        Returns:
+            _type_: Cabeza de la lista con el nodo insertado.
+        """
         if cabeza is None:
             return nuevo_nodo
         
@@ -223,6 +296,14 @@ class lista_geografica:
         return cabeza 
     
     def _insertar_asada_ordenada(self, distrito, id_asada, posicion_registro):
+        """
+        Se encarga de insertar una ASADA ordenadamente.
+        
+        Args:
+            distrito (_type_): Distrito donde se insertará la ASADA.
+            id_asada (_type_): ID de la ASADA.
+            posicion_registro (_type_): Posición del registro en el archivo binario.
+        """
         id_asada = int(id_asada)
 
         if distrito.asadas is None:
@@ -259,6 +340,15 @@ class lista_geografica:
         actual.siguiente = nueva_asada
         
     def _obtener_nombres_desde_lista(self, cabeza):
+        """
+        Se encarga de obtener los nombres desde una lista.
+        
+        Args:
+            cabeza (_type_): Cabeza de la lista.
+            
+        Returns:
+            list: Lista con los nombres.
+        """
         nombres = []
 
         for nodo in self._recorrer_lista(cabeza):
@@ -267,6 +357,15 @@ class lista_geografica:
         return nombres
 
     def _obtener_referencias_asadas(self, cabeza):
+        """
+        Se encarga de obtener las referencias de las ASADAS.
+        
+        Args:
+            cabeza (_type_): Cabeza de la lista.
+            
+        Returns:
+            list: Lista con las referencias de las ASADAS.
+        """
         referencias = []
 
         for nodo_asada in self._recorrer_lista(cabeza):
@@ -275,12 +374,30 @@ class lista_geografica:
         return referencias
 
     def _crear_referencia_asada(self, nodo_asada):
+        """
+        Se encarga de crear una referencia de una ASADA.
+        
+        Args:
+            nodo_asada (_type_): Nodo ASADA.
+            
+        Returns:
+            dict: Referencia de la ASADA.
+        """
         return {
             config.CAMPO_ID_ASADA: nodo_asada.id_asada,
             config.CAMPO_POSICION_REGISTRO: nodo_asada.posicion_registro
         }
 
     def _recorrer_lista(self, cabeza):
+        """
+        Se encarga de recorrer una lista.
+        
+        Args:
+            cabeza (_type_): Cabeza de la lista.
+            
+        Yields:
+            _type_: Nodo de la lista.
+        """
         actual = cabeza
 
         while actual is not None:
@@ -288,6 +405,15 @@ class lista_geografica:
             actual = actual.siguiente
 
     def _contar_lista(self, cabeza):
+        """
+        Se encarga de contar la cantidad de nodos en una lista.
+        
+        Args:
+            cabeza (_type_): Cabeza de la lista.
+            
+        Returns:
+            int: Cantidad de nodos en la lista.
+        """
         cantidad = 0
 
         for _ in self._recorrer_lista(cabeza):
@@ -296,6 +422,15 @@ class lista_geografica:
         return cantidad
     
     def _normalizar_nombre(self, nombre):
+        """
+        Se encarga de normalizar un nombre.
+        
+        Args:
+            nombre (_type_): Nombre a normalizar.
+            
+        Returns:
+            str: Nombre normalizado.
+        """
         if nombre is None:
             return "SIN DATO"
 
@@ -307,6 +442,15 @@ class lista_geografica:
         return texto
 
     def _clave_busqueda(self, nombre):
+        """
+        Se encarga de obtener la clave de búsqueda de un nombre.
+        
+        Args:
+            nombre (_type_): Nombre a buscar.
+            
+        Returns:
+            str: Clave de búsqueda.
+        """
         texto = self._normalizar_nombre(nombre)
         texto_normalizado = unicodedata.normalize("NFD", texto)
 

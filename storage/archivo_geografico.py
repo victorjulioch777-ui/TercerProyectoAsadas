@@ -6,7 +6,7 @@ def guardar_estructura_geografica(estructura_geografica):
     """
     Se encarga de guardar la estructura geografica.
     Args:
-        estructura_geografica (_type_): Diccionario con la estructura geografica.
+        estructura_geografica (lista_geografica): Estructura geografica.
     """
     ruta_archivo_geografico.parent.mkdir(parents=True, exist_ok=True)
     
@@ -15,9 +15,9 @@ def guardar_estructura_geografica(estructura_geografica):
         
 def cargar_estructura_geografica():
     """
-    Se encarga de cargar la estructura geografica del archivo binario.
+    Se encarga de cargar la estructura geografica
     Returns:
-        _type_: Datos de la estructura geografica.
+        lista_geografica: Datos de la estructura geografica.
     """
     with open(ruta_archivo_geografico, "rb")as archivo:
         return pickle.load(archivo)

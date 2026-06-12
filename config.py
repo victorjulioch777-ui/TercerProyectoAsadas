@@ -159,13 +159,16 @@ MENSAJE_METADATA_CAMBIO = "Se detectó una actualización en la metadata."
 MENSAJE_RECONSTRUYENDO = "Reconstruyendo archivos y estructuras..."
 MENSAJE_METADATA_GUARDADA = "METADATA LOCAL ACTUALIZADA CORRECTAMENTE."
 
+# URLs del API.
 URL_ARESEP_ASADAS = (
     "https://datos.aresep.go.cr/ws.datosabiertos/Services/IA/Asadas.svc/"
     "ObtenerInformacionUbicacionAsadas"
 )
 
+# Tiempo de espera entre peticiones al API.
 TIEMPO_ESPERA_API = (0.3, 0.3)
 
+# Mensajes del sincronizador.
 MENSAJE_DESCARGANDO_DATOS = "Descargando datos desde ARESEP..."
 MENSAJE_JSON_LOCAL_ACTUALIZADO = "JSON local actualizado correctamente."
 MENSAJE_ERROR_DESCARGA = "No se pudieron descargar los datos desde ARESEP."

@@ -28,6 +28,9 @@ def mostrar_fechas_metadata(fecha_actual, fecha_local):
     print("Fecha local", fecha_local)
     
 def obtener_datos_locales_previos():
+    """
+    Se encarga de obtener los datos locales previos.
+    """
     try:
         return cargar_json_local_seguro()
     except (FileNotFoundError, json.JSONDecodeError, error_datos_aresep):
@@ -35,6 +38,12 @@ def obtener_datos_locales_previos():
 
 
 def existen_archivos_estructuras():
+    """
+    Se encarga de verificar si existen los archivos de estructuras.
+    
+    Returns:
+        bool: True si existen los archivos de estructuras, False en caso contrario.
+    """
     rutas = [
         config.ruta_archivo_asadas,
         config.ruta_archivo_arbol,
@@ -45,6 +54,15 @@ def existen_archivos_estructuras():
 
 
 def obtener_id_registro(registro):
+    """
+    Se encarga de obtener el id de registro de un registro.
+    
+    Args:
+        registro (dict): Registro de ASADA.
+        
+    Returns:
+        int: ID de registro.
+    """
     clave_id = config.CLAVES_JSON_ASADA["ID_ASADA"]
     id_asada = registro.get(clave_id)
 
@@ -58,6 +76,15 @@ def obtener_id_registro(registro):
 
 
 def indexar_registros_por_id(datos_aresep):
+    """
+    Se encarga de indexar los registros por ID.
+    
+    Args:
+        datos_aresep (dict): Datos de ARESEP.
+        
+    Returns:
+        dict: Índice de registros por ID.
+    """
     indice = {}
 
     for registro in datos_aresep.get("value", []):
@@ -70,6 +97,15 @@ def indexar_registros_por_id(datos_aresep):
 
 
 def crear_firma_registro(registro):
+    """
+    Se encarga de crear la firma de un registro.
+    
+    Args:
+        registro (dict): Registro de ASADA.
+        
+    Returns:
+        str: Firma del registro.
+    """
     return json.dumps(
         registro,
         sort_keys=True,
@@ -79,6 +115,16 @@ def crear_firma_registro(registro):
 
 
 def calcular_cambios_incrementales(datos_anteriores, datos_actuales):
+    """
+    Se encarga de calcular los cambios incrementales entre dos conjuntos de datos.
+    
+    Args:
+        datos_anteriores (dict): Datos anteriores.
+        datos_actuales (dict): Datos actuales.
+        
+    Returns:
+        dict: Cambios incrementales.
+    """
     registros_actuales = indexar_registros_por_id(datos_actuales)
 
     if datos_anteriores is None:
@@ -127,6 +173,12 @@ def calcular_cambios_incrementales(datos_anteriores, datos_actuales):
 
 
 def mostrar_resumen_incremental(cambios):
+    """
+    Se encarga de mostrar el resumen incremental.
+    
+    Args:
+        cambios (dict): Cambios incrementales.
+    """
     print("Resumen de actualización incremental:")
     print("ASADAS anteriores:", cambios["total_anterior"])
     print("ASADAS actuales:", cambios["total_actual"])
@@ -166,6 +218,16 @@ def reconstruir_estructuras(datos_aresep):
     }
 
 def construir_arbol(lista_asadas, posiciones):
+    """
+    Se encarga de construir el árbol binario.
+    
+    Args:
+        lista_asadas (list): Lista de ASADAS.
+        posiciones (dict): Posiciones de las ASADAS.
+        
+    Returns:
+        arbol_binario_de_busqueda: Árbol binario.
+    """
     arbol = arbol_binario_de_busqueda()
     pares_id_posicion = []
     
@@ -184,6 +246,16 @@ def construir_arbol(lista_asadas, posiciones):
     return arbol
 
 def construir_estructura_geografica(lista_asadas, posiciones):   
+    """
+    Se encarga de construir la estructura geográfica.
+    
+    Args:
+        lista_asadas (list): Lista de ASADAS.
+        posiciones (dict): Posiciones de las ASADAS.
+        
+    Returns:
+        lista_geografica: Estructura geográfica.
+    """
     estructura = lista_geografica()
     
     for asada in lista_asadas:
@@ -203,6 +275,12 @@ def construir_estructura_geografica(lista_asadas, posiciones):
     return estructura
 
 def estructuras_actualizadas_con_json_local():
+    """
+    Se encarga de verificar si las estructuras están actualizadas con el JSON local.
+    
+    Returns:
+        bool: True si las estructuras están actualizadas, False en caso contrario.
+    """
     if not existen_archivos_estructuras():
         return False
 
@@ -220,6 +298,12 @@ def estructuras_actualizadas_con_json_local():
 
 
 def sincronizar_desde_cache_local():
+    """
+    Se encarga de sincronizar los datos desde la caché local.
+    
+    Returns:
+        dict: Resultado de la sincronización.
+    """
     if not estructuras_actualizadas_con_json_local():
         return None
 
@@ -239,6 +323,15 @@ def sincronizar_desde_cache_local():
 
 
 def sincronizar_datos(forzar = False):
+    """
+    Se encarga de sincronizar los datos.
+    
+    Args:
+        forzar (bool): Si es True, se fuerza la sincronización.
+        
+    Returns:
+        dict: Resultado de la sincronización.
+    """
     print(config.MENSAJE_VERIFICANDO_ACTUALIZACION)
     
     datos_anteriores = obtener_datos_locales_previos()

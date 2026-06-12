@@ -4,9 +4,15 @@ import requests
 from models.asada import Asada
 
 class error_datos_aresep(Exception):
+    """
+    Se encarga de representar un error en los datos de ARESEP.
+    """
     pass
 
 def validar_datos_aresep(datos):
+    """
+    Se encarga de validar los datos de ARESEP.
+    """
     if not isinstance(datos, dict):
         raise error_datos_aresep("La respuesta de ARESEP no tiene formato de diccionario.")
     
@@ -20,6 +26,9 @@ def validar_datos_aresep(datos):
         raise error_datos_aresep("El campo value de ARESEP no es una lista.")
 
 def descargar_datos_aresep():
+    """
+    Se encarga de descargar los datos de ARESEP.
+    """
     print(config.MENSAJE_DESCARGANDO_DATOS)
 
     respuesta = requests.get(
@@ -35,16 +44,25 @@ def descargar_datos_aresep():
     return datos
 
 def guardar_json_local(datos):
+    """
+    Se encarga de guardar los datos de ARESEP en un archivo JSON local.
+    """
     with open(config.ruta_json_asadas, "w", encoding="utf-8") as archivo:
         json.dump(datos, archivo, indent=4, ensure_ascii=False)
         
     print(config.MENSAJE_JSON_LOCAL_ACTUALIZADO)
 
 def cargar_json_local():
+    """
+    Se encarga de cargar los datos de ARESEP desde un archivo JSON local.
+    """
     with open(config.ruta_json_asadas, "r", encoding="utf-8")as archivo:
         return json.load(archivo)
 
 def cargar_json_local_seguro():
+    """
+    Se encarga de cargar los datos de ARESEP desde un archivo JSON local de manera segura.
+    """
     try:
         datos = cargar_json_local()
         validar_datos_aresep(datos)
@@ -62,6 +80,9 @@ def cargar_json_local_seguro():
         raise
 
 def obtener_datos_aresep():
+    """
+    Se encarga de obtener los datos de ARESEP.
+    """
     try:
         datos = descargar_datos_aresep()
         guardar_json_local(datos)
@@ -83,18 +104,27 @@ def obtener_datos_aresep():
         }
     
 def obtener_lista_asadas(datos=None):
+    """
+    Se encarga de obtener la lista de ASADAS.
+    """
     if datos is None:
         datos = cargar_json_local()
         
     return datos["value"]
 
 def obtener_metadata(datos=None):
+    """
+    Se encarga de obtener la metadata.
+    """
     if datos is None:
         datos = cargar_json_local()
         
     return datos["metadata"]
 
 def obtener_objetos_asadas(datos=None):
+    """
+    Se encarga de obtener los objetos ASADA desde los datos de ARESEP.
+    """
     registros = obtener_lista_asadas(datos)
     asadas = []
     errores = []

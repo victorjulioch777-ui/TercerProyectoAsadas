@@ -4,10 +4,20 @@ from models.nodo_arbol import nodo_arbol
 
 class arbol_binario_de_busqueda:
     def __init__(self):
+        """
+        Se encarga de inicializar el arbol binario de busqueda.
+        """
         self.raiz = None
         self.cantidad_nodos = 0
         
     def insertar(self, id_asada, posicion_registro):
+        """
+        Se encarga de insertar un nodo en el arbol binario de busqueda.
+        
+        Args:
+            id_asada (int): ID de la ASADA.
+            posicion_registro (int): Posicion del registro en el archivo binario.
+        """
         nuevo_nodo = nodo_arbol(id_asada, posicion_registro)
         
         if self.raiz is None:
@@ -18,6 +28,12 @@ class arbol_binario_de_busqueda:
         self._insertar_iterativo(nuevo_nodo)
 
     def _insertar_iterativo(self, nuevo_nodo):
+        """
+        Se encarga de insertar un nodo de forma iterativa.
+        
+        Args:
+            nuevo_nodo (nodo_arbol): Nodo a insertar.
+        """
         nodo_actual = self.raiz
 
         while True:   
@@ -44,6 +60,12 @@ class arbol_binario_de_busqueda:
                 return
       
     def construir_balanceado(self, pares_id_posicion):
+        """
+        Se encarga de construir el arbol binario de busqueda de forma balanceada.
+        
+        Args:
+            pares_id_posicion (list): Lista de tuplas con el id_asada y la posicion_registro.
+        """
         pares_ordenados = sorted(pares_id_posicion, key=lambda par: par[0])
         
         self.raiz = None
@@ -96,6 +118,15 @@ class arbol_binario_de_busqueda:
             })
               
     def buscar(self, id_asada):
+        """
+        Se encarga de buscar un nodo en el arbol binario de busqueda.
+        
+        Args:
+            id_asada (int): ID de la ASADA.
+            
+        Returns:
+            int: Posicion del registro en el archivo binario.
+        """
         try:
             id_asada = int(id_asada)
         except (TypeError, ValueError):
@@ -136,6 +167,12 @@ class arbol_binario_de_busqueda:
         return resultado
 
     def altura(self):
+        """
+        Se encarga de calcular la altura del arbol binario de busqueda.
+        
+        Returns:
+            int: Altura del arbol binario de busqueda.
+        """
         if self.raiz is None:
             return 0
         
@@ -155,6 +192,12 @@ class arbol_binario_de_busqueda:
         return altura_maxima
     
     def estar_balanceado(self):
+        """
+        Se encarga de verificar si el arbol binario de busqueda esta balanceado.
+        
+        Returns:
+            bool: True si el arbol binario de busqueda esta balanceado, False en caso contrario.
+        """
         if self.raiz is None:
             return True
         
@@ -186,6 +229,12 @@ class arbol_binario_de_busqueda:
         return True
     
     def obtener_estadisticas(self):
+        """
+        Se encarga de obtener las estadisticas del arbol binario de busqueda.
+        
+        Returns:
+            dict: Diccionario con las estadisticas del arbol binario de busqueda.
+        """
         return {
             "cantidad_nodos": self.cantidad_nodos,
             "altura": self.altura(),

@@ -207,6 +207,9 @@ def generar_mapa_por_id() -> None:
 
 
 def mostrar_opciones_menu() -> None:
+    """
+    Se encarga de mostrar las opciones del menu.
+    """
     print("\n==== Sistema de consulta de ASADAS ====")
     print(f"{config.OPCION_SINCRONIZAR}. Sincronizar datos")
     print(f"{config.OPCION_BUSCAR_ID}. Buscar ASADA por id_Asada")
@@ -216,6 +219,15 @@ def mostrar_opciones_menu() -> None:
 
 
 def procesar_opcion_menu(opcion: str) -> bool:
+    """
+    Se encarga de procesar la opcion del menu.
+    
+    Args:
+        opcion (str): Opcion del menu.
+        
+    Returns:
+        bool: True si continuar, False si salir.
+    """
     acciones_menu = {
         config.OPCION_SINCRONIZAR: sincronizar_datos,
         config.OPCION_BUSCAR_ID: buscar_id,
