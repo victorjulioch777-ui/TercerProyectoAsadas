@@ -105,8 +105,8 @@ def crear_despachador(arbol, estructura):
             solicitud,
             estructura
         ),
-        config.ACCION_SALIR: lambda solicitud: crear_respuesta_ok(
-            mensaje = config.MENSAJE_CONEXION_CERRADA
+        config.ACCION_SALIR: lambda _solicitud: crear_respuesta_ok(
+            mensaje=config.MENSAJE_CONEXION_CERRADA
         )
     }        
     

@@ -156,8 +156,9 @@ def calcular_cambios_incrementales(datos_anteriores, datos_actuales):
 
         if firma_anterior != firma_actual:
             actualizadas.append(id_asada)
-        else:
-            sin_cambios.append(id_asada)
+            continue
+
+        sin_cambios.append(id_asada)
 
     hubo_cambios = bool(agregadas or actualizadas or eliminadas)
 
@@ -241,7 +242,8 @@ def construir_arbol(lista_asadas, posiciones):
     
     print("Árbol binario construido.")
     print("Cantidad de nodos:", estadisticas["cantidad_nodos"])
-    print("Altura de árbol:", estadisticas["balanceado"])
+    print("Altura de árbol:", estadisticas["altura"])
+    print("Árbol balanceado:", estadisticas["balanceado"])
         
     return arbol
 
@@ -336,12 +338,6 @@ def sincronizar_datos(forzar = False):
     
     datos_anteriores = obtener_datos_locales_previos()
 
-    if not forzar:
-        resultado_cache = sincronizar_desde_cache_local()
-
-        if resultado_cache is not None:
-            return resultado_cache
-    
     resultado_descarga = obtener_datos_aresep()
     datos_aresep = resultado_descarga["datos"]
     origen_datos = resultado_descarga["origen"]
@@ -415,7 +411,7 @@ def debo_reconstruir(forzar, fecha_actual, fecha_local, origen_datos):
         return True
     
     if not existen_archivos_estructuras():
-        print("Faltan arhivos binarios locales. Se reconstruirán las estructuras.")
+        print("Faltan archivos binarios locales. Se reconstruirán las estructuras.")
         return True
     
     if origen_datos == "local":

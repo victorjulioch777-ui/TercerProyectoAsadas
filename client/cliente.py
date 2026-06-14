@@ -20,7 +20,7 @@ def iniciar_cliente():
         cliente.connect((HOST, PORT))
         mostrar_menu_cliente(cliente)    
     except ConnectionRefusedError:
-        print("No se pudo conectar con el servidor. Verfique que este encendido.")
+        print("No se pudo conectar con el servidor. Verifique que esté encendido.")
     finally:
         cliente.close()
         
@@ -44,9 +44,9 @@ def mostrar_menu_cliente(cliente):
         elif opcion == config.OPCIONES_CLIENTE["BUSCAR_UBICACION"]:
             buscar_por_ubicacion(cliente)
         elif opcion == config.OPCIONES_CLIENTE["SALIR"]:
-            enviar_mensaje(cliente, {"accion": "salir"})
+            enviar_mensaje(cliente, {config.CAMPO_ACCION: config.ACCION_SALIR})
             respuesta = recibir_mensaje(cliente)
-            print(respuesta.get("mensaje"))
+            print(respuesta.get(config.CAMPO_MENSAJE))
             return
         else:
             print("Opción inválida.")
@@ -59,13 +59,56 @@ def enviar_solicitud(cliente, accion, **datos):
         accion (_type_): String que indica la accion a realizar
     """
     solicitud = {
-        "accion": accion,
+        config.CAMPO_ACCION: accion,
         **datos
     }
     
     enviar_mensaje(cliente, solicitud)
     respuesta = recibir_mensaje(cliente)
     mostrar_respuesta(respuesta)
+
+def procesar(cliente, accion, **datos):
+    """
+    Se encarga de enviar la solicitud al servidor y mostrar la respuesta.
+    Args:
+        cliente (_type_): Socket del cliente
+        accion (_type_): String que indica la accion a realizar
+    """
+    enviar_solicitud(
+        cliente,
+        accion,
+        **datos
+    )
+
+def enviar_busqueda_por_id(cliente, id_asada):
+    """
+    Se encarga de enviar la solicitud de busqueda por id al servidor.
+    Args:
+        cliente (_type_): Socket del cliente
+        id_asada (_type_): String que indica el id de la ASADA
+    """
+    procesar(
+        cliente,
+        config.ACCION_BUSCAR_ID,
+        id_asada=id_asada
+    )
+    
+def enviar_busqueda_por_ubicacion(cliente, provincia, canton, distrito):
+    """
+    Se encarga de enviar la solicitud de busqueda por ubicacion al servidor.
+    Args:
+        cliente (_type_): Socket del cliente
+        provincia (_type_): String que indica la provincia
+        canton (_type_): String que indica el canton
+        distrito (_type_): String que indica el distrito
+    """
+    procesar(
+        cliente,
+        config.ACCION_BUSCAR_UBICACION,
+        provincia=provincia,
+        canton=canton,
+        distrito=distrito
+    )
        
 def buscar_por_id(cliente):
     """
@@ -79,11 +122,7 @@ def buscar_por_id(cliente):
         print("El id_asada debe ser un número.")
         return
     
-    enviar_solicitud(
-        cliente,
-        "buscar_id",
-        id_asada = id_asada
-    )
+    enviar_busqueda_por_id(cliente, id_asada)
 
 def buscar_por_ubicacion(cliente):
     """
@@ -96,15 +135,14 @@ def buscar_por_ubicacion(cliente):
     distrito = input("Digite el distrito: ").strip().upper()
     
     if not provincia or not canton or not distrito:
-        print("Debe completar pronvincia, canton y distrito.")
+        print("Debe completar provincia, cantón y distrito.")
         return
     
-    enviar_solicitud(
+    enviar_busqueda_por_ubicacion(
         cliente,
-        "buscar_ubicacion",
-        provincia = provincia,
-        canton = canton,
-        distrito = distrito
+        provincia,
+        canton,
+        distrito
     )
     
 def mostrar_respuesta(respuesta):
@@ -114,14 +152,14 @@ def mostrar_respuesta(respuesta):
         respuesta (_type_): Diccionario con la respuesta del servidor
     """
     if respuesta is None:
-        print("No se recibio respuestas del servidor.")
+        print("No se recibió respuesta del servidor.")
         return
     
-    if respuesta.get("estado") == "error":
-        print("Error:", respuesta.get("mensaje"))
+    if respuesta.get(config.CAMPO_ESTADO) == config.ESTADO_ERROR:
+        print("Error:", respuesta.get(config.CAMPO_MENSAJE))
         return 
     
-    datos = respuesta.get("datos")
+    datos = respuesta.get(config.CAMPO_DATOS)
     
     if isinstance(datos, list):
         for asada in datos:
@@ -135,6 +173,10 @@ def mostrar_asada(asada):
     Args:
         asada (_type_): Diccionario con la informacion de la ASADA
     """
+    if not asada:
+        print("No hay datos para mostrar.")
+        return
+
     print("-----------------------------------")
     print(f"{config.CLAVES_ASADAS['ID']}:", asada[config.CAMPO_ID_ASADA])
     print(f"{config.CLAVES_ASADAS['OPERADOR']}:", asada[config.CAMPO_OPERADOR])
